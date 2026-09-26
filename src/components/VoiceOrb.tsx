@@ -1,3 +1,4 @@
+import { useMotionValue } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 
 import type {
@@ -7,46 +8,10 @@ import type {
   ProductViewMode,
 } from '@/product-types'
 import { INPUT_RATE, base64ToPcm, bytesToBase64, floatToPcm16, resample } from '@/realtime-audio'
-import type { SavedListing } from '@/saved-listing-types'
+import type { ActiveOutput, AudioRuntime, RealtimeMessage } from '@/realtime-client-types'
 
 import { VoiceOrbSurface } from './VoiceOrbSurface'
 import type { OrbState } from './VoiceStatus'
-
-type AudioRuntime = {
-  context: AudioContext
-  stream: MediaStream
-  source: MediaStreamAudioSourceNode
-  processor: ScriptProcessorNode
-  silentGain: GainNode
-}
-
-type ActiveOutput = {
-  itemId: string
-  responseId: string
-  contentIndex: number
-  startedAt: number
-}
-
-type RealtimeMessage = {
-  type?: string
-  status?: string
-  delta?: string
-  item_id?: string
-  response_id?: string
-  call_id?: string
-  content_index?: number
-  action?: 'show' | 'close'
-  heading?: string
-  products?: ProductCardData[]
-  view?: ProductViewMode
-  sort?: ProductSortMode
-  listings?: SavedListing[]
-  url?: string
-  analysis?: ProductAnalysis
-  phase?: 'waiting' | 'started' | 'completed'
-  tool?: string
-  response?: { id?: string }
-}
 
 type VoiceOrbProps = {
   conversationId?: string
@@ -69,7 +34,7 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
   const [savedUrls, setSavedUrls] = useState<ReadonlySet<string>>(new Set())
   const socketRef = useRef<WebSocket | null>(null)
   const audioRef = useRef<AudioRuntime | null>(null)
-  const orbRef = useRef<HTMLButtonElement>(null)
+  const audioLevel = useMotionValue(0)
   const playbackContextRef = useRef<AudioContext | null>(null)
   const playbackAtRef = useRef(0)
   const playbackSourcesRef = useRef(new Set<AudioBufferSourceNode>())
@@ -108,7 +73,7 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
   }
 
   const setLevel = (level: number) => {
-    orbRef.current?.style.setProperty('--level', String(Math.min(1, level)))
+    audioLevel.set(Math.max(0, Math.min(1, level)))
   }
 
   const signalToolReady = () => {
@@ -189,13 +154,13 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
     }
   }
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    mountedRef.current = true
+    return () => {
       mountedRef.current = false
       shutdown(false)
-    },
-    [],
-  )
+    }
+  }, [])
 
   const playAudio = (base64: string, output: Omit<ActiveOutput, 'startedAt'>) => {
     const pcm = base64ToPcm(base64)
@@ -494,7 +459,7 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
 
   return (
     <VoiceOrbSurface
-      orbRef={orbRef}
+      level={audioLevel}
       state={state}
       isMuted={isMuted}
       onStart={() => void start()}

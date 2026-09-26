@@ -1,93 +1,107 @@
 @import 'tailwindcss';
 @import '@heroui/react/styles';
+@import './styles/voice.css';
 
 @source './**/*.{ts,tsx}';
 
-/*
- * markit brand theme.
- * Overrides HeroUI's semantic tokens so every HeroUI component (buttons,
- * cards, fields, drawer, dropdown, meter) carries the brand natively:
- * ink + chartreuse from logo.svg / favicon.svg on warm paper.
- */
 :root,
 :root[data-theme='light'] {
-  /* Base */
-  --background: oklch(0.9705 0.008 106.42);
-  --foreground: oklch(0.2295 0.0173 129.55);
-
-  /* Surfaces */
-  --surface: oklch(0.995 0.003 106.42);
+  --background: #faf7f2;
+  --foreground: #252332;
+  --surface: #fffdfb;
   --surface-foreground: var(--foreground);
-  --surface-secondary: oklch(0.9564 0.0086 106.66);
-  --surface-tertiary: oklch(0.9358 0.0104 107.16);
-  --overlay: oklch(0.995 0.003 106.42);
+  --surface-secondary: #f1edf5;
+  --surface-tertiary: #e9e2f0;
+  --overlay: #fffdfb;
   --overlay-foreground: var(--foreground);
-
-  --muted: oklch(0.5188 0.0247 122.03);
-  --default: oklch(0.9405 0.0106 110.29);
+  --muted: #686173;
+  --default: #eee8f1;
   --default-foreground: var(--foreground);
-
-  /* Brand accent: chartreuse (#c8ff3d) with ink foreground */
-  --accent: oklch(0.9291 0.2227 122.6);
-  --accent-foreground: oklch(0.2016 0.0325 130.19);
-  --accent-soft: color-mix(in oklab, var(--accent) 22%, transparent);
-  --accent-soft-foreground: oklch(0.4576 0.1076 126.29);
-  --accent-soft-hover: color-mix(in oklab, var(--accent) 30%, transparent);
-
-  /* Fields */
+  --accent: #69518f;
+  --accent-foreground: #ffffff;
+  --accent-soft: #ebe4f4;
+  --accent-soft-foreground: #5f467f;
+  --accent-soft-hover: #e3d8ee;
   --field-background: var(--surface);
   --field-foreground: var(--foreground);
-
-  /* Misc */
-  --border: oklch(0.8963 0.0138 110.51);
-  --separator: oklch(0.9204 0.0117 109.65);
-  --focus: oklch(0.5537 0.1391 127.42);
-  --link: oklch(0.4576 0.1076 126.29);
-  --radius: 0.625rem;
+  --border: #e1d9e6;
+  --separator: #e9e2eb;
+  --focus: #69518f;
+  --link: #5f467f;
+  --radius: 0.85rem;
+  --brand-lavender: #dcd4ff;
+  --brand-peach: #ffd9c9;
+  --brand-mint: #cff3df;
+  --orb-ribbon: #a18aaa;
+  --orb-line: #ffffffc9;
+  --orb-shadow:
+    inset 8px 10px 28px #ffffff70, inset -12px -14px 28px #89739120, 0 24px 55px -16px #69518f30;
+  --surface-shadow: 0 12px 36px -24px #47335c40, 0 1px 2px #47335c08;
+  --overlay-shadow: 0 24px 70px -24px #47335c40;
+  --state-think: #69518f;
+  --state-speak: #885941;
 }
 
 :root[data-theme='dark'] {
-  /* Base: moss-black ink */
-  --background: oklch(0.1637 0.0126 124.5);
-  --foreground: oklch(0.9601 0.0106 110.28);
-
-  /* Surfaces */
-  --surface: oklch(0.2152 0.0148 124.9);
-  --surface-foreground: var(--foreground);
-  --surface-secondary: oklch(0.2464 0.015 124.9);
-  --surface-tertiary: oklch(0.2761 0.0152 124.9);
-  --overlay: oklch(0.2364 0.015 124.9);
-  --overlay-foreground: var(--foreground);
-
-  --muted: oklch(0.7268 0.0224 115.03);
-  --default: oklch(0.2831 0.0154 124.9);
-  --default-foreground: var(--foreground);
-
-  /* Chartreuse holds; ink foreground keeps CTA contrast */
-  --accent: oklch(0.9291 0.2227 122.6);
-  --accent-foreground: oklch(0.2016 0.0325 130.19);
-  --accent-soft: color-mix(in oklab, var(--accent) 16%, transparent);
-  --accent-soft-foreground: oklch(0.8804 0.1704 122.85);
-  --accent-soft-hover: color-mix(in oklab, var(--accent) 22%, transparent);
-
-  /* Fields */
-  --field-background: oklch(0.2464 0.015 124.9);
-  --field-foreground: var(--foreground);
-
-  /* Misc */
-  --border: oklch(0.3049 0.0158 124.9);
-  --separator: oklch(0.2655 0.0152 124.9);
-  --focus: var(--accent);
-  --link: oklch(0.8804 0.1704 122.85);
+  --background: #1c1924;
+  --foreground: #f4eff9;
+  --surface: #282331;
+  --surface-secondary: #312a3c;
+  --surface-tertiary: #3b3247;
+  --overlay: #2d2737;
+  --muted: #b9afc7;
+  --default: #3b3247;
+  --accent: #cab6e5;
+  --accent-foreground: #282132;
+  --accent-soft: #3c304e;
+  --accent-soft-foreground: #e0cbf5;
+  --accent-soft-hover: #48395c;
+  --field-background: var(--surface-secondary);
+  --border: #494054;
+  --separator: #3c3447;
+  --focus: #cab6e5;
+  --link: #dfc8f8;
+  --brand-lavender: #756293;
+  --brand-peach: #ba8c80;
+  --brand-mint: #7fab9a;
+  --orb-ribbon: #b7a4ce;
+  --orb-line: #e9daf366;
+  --orb-shadow:
+    inset 8px 10px 28px #ffffff20, inset -12px -14px 28px #28203450, 0 24px 55px -16px #00000066;
+  --surface-shadow: 0 12px 36px -24px #00000066;
+  --overlay-shadow: 0 24px 70px -24px #00000099;
+  --state-think: #d3bde9;
+  --state-speak: #e7bba2;
 }
 
-/* Project tokens, derived from the theme so they flip with it. */
 :root {
-  --glass: color-mix(in srgb, var(--surface) 86%, transparent);
-  --text-secondary: color-mix(in oklab, var(--foreground) 74%, var(--background) 26%);
+  --glass: color-mix(in srgb, var(--surface) 88%, transparent);
+  --text-secondary: color-mix(in oklab, var(--foreground) 82%, var(--background));
   --text-muted: var(--muted);
-  --page-glow: color-mix(in oklab, var(--accent) 7%, var(--surface));
-  font-family: system-ui, sans-serif;
+  --brand-background:
+    radial-gradient(
+      ellipse at 85% 18%,
+      color-mix(in srgb, var(--brand-lavender) 28%, transparent),
+      transparent 54%
+    ),
+    radial-gradient(
+      ellipse at 10% 90%,
+      color-mix(in srgb, var(--brand-peach) 22%, transparent),
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at 60% 80%,
+      color-mix(in srgb, var(--brand-mint) 14%, transparent),
+      transparent 42%
+    ),
+    var(--background);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
   font-synthesis: none;
   color: var(--foreground);
   background: var(--background);
@@ -117,20 +131,20 @@ button {
 }
 
 .voice-stage {
-  /* Reserve room for the fixed account bar; the agent sizes itself from these. */
-  --stage-top: 6rem;
+  --stage-top: max(6rem, calc(env(safe-area-inset-top) + 5rem));
   --stage-pad: 2rem;
   --sidebar-space: 14.5rem;
   display: grid;
   width: 100%;
-  min-height: 100svh;
-  place-items: center;
-  overflow: hidden;
-  padding: var(--stage-top) var(--stage-pad) var(--stage-pad)
+  height: 100svh;
+  height: 100dvh;
+  align-items: safe center;
+  justify-items: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--stage-top) var(--stage-pad) max(var(--stage-pad), env(safe-area-inset-bottom))
     calc(var(--stage-pad) + var(--sidebar-space));
-  background:
-    radial-gradient(circle at 50% 46%, var(--page-glow), transparent 34rem), var(--background);
-  transition: padding-left 240ms ease;
+  background: var(--brand-background);
 }
 
 .voice-stage.sidebar-is-hidden {
@@ -179,12 +193,12 @@ button {
 
 .sidebar-collapse-button,
 .sidebar-expand-button {
-  width: 2rem !important;
-  min-width: 2rem !important;
-  height: 2rem !important;
-  min-height: 2rem !important;
+  width: 2.75rem !important;
+  min-width: 2.75rem !important;
+  height: 2.75rem !important;
+  min-height: 2.75rem !important;
   padding: 0 !important;
-  border-radius: 0.7rem !important;
+  border-radius: 0.85rem !important;
   color: var(--text-muted) !important;
 }
 
@@ -212,14 +226,14 @@ button {
 
 .sidebar-link {
   width: 100%;
-  min-height: 2.65rem !important;
+  min-height: 2.85rem !important;
   justify-content: flex-start !important;
   gap: 0.7rem !important;
   padding-inline: 0.65rem !important;
   border-radius: 0.85rem !important;
   color: var(--text-secondary) !important;
-  font-size: 0.72rem !important;
-  font-weight: 650 !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
 }
 
 .sidebar-link:hover {
@@ -254,10 +268,10 @@ button {
 }
 
 .sidebar-new-session {
-  width: 2rem !important;
-  min-width: 2rem !important;
-  height: 2rem !important;
-  min-height: 2rem !important;
+  width: 2.75rem !important;
+  min-width: 2.75rem !important;
+  height: 2.75rem !important;
+  min-height: 2.75rem !important;
   padding: 0 !important;
   color: var(--text-muted) !important;
 }
@@ -277,13 +291,13 @@ button {
 
 .sidebar-session {
   width: 100%;
-  min-height: 2.25rem !important;
+  min-height: 2.75rem !important;
   justify-content: flex-start !important;
   gap: 0.55rem !important;
   padding-inline: 0.65rem !important;
   border-radius: 0.75rem !important;
   color: var(--text-muted) !important;
-  font-size: 0.66rem !important;
+  font-size: 0.76rem !important;
 }
 
 .sidebar-session svg {
@@ -318,7 +332,7 @@ button {
   flex: none;
   margin-top: 0.22rem;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--accent-soft-foreground);
   box-shadow: 0 0 0 0.2rem var(--accent-soft);
 }
 
@@ -333,214 +347,45 @@ button {
 
 .sidebar-note div span {
   color: var(--text-muted);
-  font-size: 0.58rem;
-  line-height: 1.4;
+  font-size: 0.72rem;
+  line-height: 1.5;
 }
 
 .commerce-agent {
   display: grid;
-  width: min(76rem, 100%);
-  height: min(46rem, calc(100svh - var(--stage-top) - var(--stage-pad)));
-  grid-template-columns: minmax(0, 1fr) 0fr;
+  width: min(78rem, 100%);
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  gap: 0;
-  transition:
-    grid-template-columns 500ms cubic-bezier(0.22, 1, 0.36, 1),
-    gap 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .commerce-agent.has-products {
-  grid-template-columns: minmax(16rem, 0.64fr) minmax(31rem, 1.36fr);
-  gap: clamp(1.75rem, 4vw, 4.5rem);
+  grid-template-columns: minmax(13rem, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
 }
 
 .voice-agent {
   display: grid;
   min-width: 0;
-  place-items: center;
-  gap: 2rem;
-  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.commerce-agent.has-products .voice-agent {
-  transform: translateX(-0.5rem);
-}
-
-.voice-orb {
-  --level: 0;
-  position: relative;
-  width: clamp(148px, 21vw, 224px) !important;
-  min-width: 0 !important;
-  height: auto !important;
-  min-height: 0 !important;
-  aspect-ratio: 1;
-  padding: 0 !important;
-  border: 0;
-  border-radius: 50%;
-  outline: none;
-  cursor: pointer;
-  background: transparent;
-  transform: scale(calc(1 + var(--level) * 0.075));
-  transition:
-    transform 70ms linear,
-    filter 300ms ease;
-}
-
-.voice-orb:focus-visible::after {
-  position: absolute;
-  inset: -12px;
-  border: 2px solid var(--focus);
-  border-radius: inherit;
-  content: '';
-}
-
-.orb-halo {
-  position: absolute;
-  inset: calc(-20% - var(--level) * 10%);
-  border-radius: 50%;
-  opacity: calc(0.16 + var(--level) * 0.25);
-  background: radial-gradient(
-    circle,
-    color-mix(in oklab, var(--accent) 78%, transparent),
-    color-mix(in oklab, var(--orb-mint) 32%, transparent) 44%,
-    transparent 70%
-  );
-  filter: blur(calc(30px + var(--level) * 18px));
-  transform: scale(calc(0.95 + var(--level) * 0.18));
-  transition:
-    opacity 100ms linear,
-    transform 100ms linear;
-}
-
-.orb-shell {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  border: 1px solid var(--orb-line);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 34% 26%, var(--orb-highlight) 0 3%, transparent 24%),
-    radial-gradient(circle at 28% 36%, var(--orb-lime), transparent 46%),
-    radial-gradient(circle at 76% 30%, var(--orb-mint), transparent 48%),
-    radial-gradient(circle at 64% 82%, var(--orb-sun), transparent 45%), var(--orb-base);
-  box-shadow: var(--orb-shadow);
-}
-
-/* Orb palette: chartreuse aurora over glass, per theme */
-:root {
-  --orb-base: oklch(0.9282 0.0511 115.51);
-  --orb-lime: color-mix(in oklab, var(--accent) 82%, white);
-  --orb-mint: oklch(0.8663 0.1071 166.55);
-  --orb-sun: oklch(0.9432 0.0672 99.13);
-  --orb-line: rgba(255, 255, 255, 0.88);
-  --orb-highlight: rgba(255, 255, 255, 0.96);
-  --orb-shadow:
-    inset 8px 10px 25px rgba(255, 255, 255, 0.6), inset -15px -18px 34px rgba(58, 74, 22, 0.14),
-    0 26px 54px rgba(58, 74, 22, 0.16), 0 4px 10px rgba(58, 74, 22, 0.08);
-  --orb-shadow-speaking:
-    inset 8px 10px 25px rgba(255, 255, 255, 0.7), inset -15px -18px 34px rgba(58, 74, 22, 0.14),
-    0 28px 64px color-mix(in oklab, var(--accent) 38%, transparent);
-  --state-think: oklch(0.4808 0.0817 168.06);
-  --state-speak: oklch(0.5036 0.1071 95.39);
-}
-
-:root[data-theme='dark'] {
-  --orb-base: oklch(0.3062 0.0499 127.850553);
-  --orb-lime: color-mix(in oklab, var(--accent) 72%, oklch(0.4 0.08 130));
-  --orb-mint: oklch(0.5525 0.1005 170.06);
-  --orb-sun: oklch(0.7501 0.1219 115.03);
-  --orb-line: rgba(255, 255, 255, 0.16);
-  --orb-highlight: rgba(255, 255, 255, 0.55);
-  --orb-shadow:
-    inset 6px 8px 22px rgba(255, 255, 255, 0.1), inset -15px -18px 34px rgba(0, 0, 0, 0.42),
-    0 26px 60px rgba(0, 0, 0, 0.5), 0 0 46px color-mix(in oklab, var(--accent) 20%, transparent);
-  --orb-shadow-speaking:
-    inset 6px 8px 22px rgba(255, 255, 255, 0.12), inset -15px -18px 34px rgba(0, 0, 0, 0.42),
-    0 28px 70px color-mix(in oklab, var(--accent) 42%, transparent);
-  --state-think: oklch(0.8022 0.1005 168.06);
-  --state-speak: oklch(0.8524 0.1219 95.39);
-}
-
-.orb-shell::before {
-  position: absolute;
-  inset: -24%;
-  border-radius: 42% 58% 48% 52%;
-  content: '';
-  opacity: calc(0.45 + var(--level) * 0.35);
-  background: conic-gradient(
-    from 30deg,
-    transparent 0 16%,
-    rgba(255, 255, 255, 0.66) 26%,
-    transparent 40% 68%,
-    color-mix(in oklab, var(--accent) 52%, transparent) 78%,
-    transparent 92%
-  );
-  mix-blend-mode: soft-light;
-  animation: drift 10s linear infinite;
-}
-
-.orb-shell::after {
-  position: absolute;
-  width: 55%;
-  height: 38%;
-  top: 7%;
-  left: 13%;
-  border-radius: 50%;
-  content: '';
-  opacity: 0.56;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), transparent 72%);
-  filter: blur(7px);
-  transform: rotate(-17deg);
-}
-
-.orb-core {
-  position: absolute;
-  inset: 27%;
-  border-radius: 50%;
-  opacity: calc(0.08 + var(--level) * 0.3);
-  background: #fff;
-  filter: blur(24px);
-  transform: scale(calc(0.75 + var(--level) * 0.9));
-  transition:
-    transform 60ms linear,
-    opacity 80ms linear;
-}
-
-.orb-wave {
-  position: absolute;
-  inset: calc(11% - var(--level) * 3%);
-  border: 1px solid rgba(255, 255, 255, calc(0.18 + var(--level) * 0.38));
-  border-radius: 50%;
-  transform: scale(calc(0.94 + var(--level) * 0.09));
-  transition: transform 70ms linear;
-}
-
-.voice-orb[data-state='connecting'] .orb-shell {
-  animation: breathe 1.4s ease-in-out infinite;
-}
-
-.voice-orb[data-state='listening'] .orb-halo {
-  animation: listen 3s ease-in-out infinite;
-}
-
-.voice-orb[data-state='speaking'] .orb-shell {
-  box-shadow: var(--orb-shadow-speaking);
-}
-
-.voice-orb[data-state='error'] {
-  filter: grayscale(0.7) opacity(0.72);
+  justify-items: center;
+  align-content: center;
+  gap: 1.5rem;
+  padding-block: 1rem;
 }
 
 .agent-status {
   display: flex;
-  min-height: 1.5rem;
+  min-height: 2.75rem;
+  max-width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--glass);
   align-items: center;
   gap: 0.6rem;
   color: var(--text-secondary);
   font-size: 0.72rem;
   font-weight: 520;
-  letter-spacing: 0.055em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
   transition:
     color 200ms ease,
     opacity 200ms ease;
@@ -548,16 +393,19 @@ button {
 
 .voice-controls {
   display: flex;
-  min-height: 2.25rem;
+  min-height: 2.75rem;
+  max-width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.7rem;
 }
 
 .mic-mute-button {
-  width: 2.25rem !important;
-  min-width: 2.25rem !important;
-  height: 2.25rem !important;
-  min-height: 2.25rem !important;
+  width: 2.75rem !important;
+  min-width: 2.75rem !important;
+  height: 2.75rem !important;
+  min-height: 2.75rem !important;
   padding: 0 !important;
   border: 1px solid var(--border) !important;
   border-radius: 999px !important;
@@ -595,6 +443,7 @@ button {
 }
 
 .agent-status[data-state='searching'],
+.agent-status[data-state='validating'],
 .agent-status[data-state='thinking'] {
   color: var(--state-think);
 }
@@ -604,30 +453,23 @@ button {
 }
 
 .agent-status[data-state='search-error'],
+.agent-status[data-state='validation-error'],
 .agent-status[data-state='error'] {
   color: var(--danger);
 }
 
-/* Bare results rail: cards float on the stage, no wrapper chrome */
 .desktop-product-panel {
   width: 100%;
   min-width: 0;
-  height: 100%;
-  overflow: hidden;
-  padding: 0.25rem 0.85rem 2rem 0.35rem;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(2rem) scale(0.98);
-  transition:
-    opacity 320ms ease,
-    transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  height: min(48rem, calc(100dvh - var(--stage-top) - var(--stage-pad)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  padding: 0.5rem 0.8rem 2rem 0.35rem;
 }
 
-.desktop-product-panel[data-open='true'] {
-  overflow-y: auto;
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(0) scale(1);
+.desktop-product-panel[data-open='false'] {
+  display: none;
 }
 
 .product-panel-heading {
@@ -667,12 +509,8 @@ button {
   gap: 1rem;
 }
 
-.product-arrangement {
-  animation: product-arrangement-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
 .product-card-list[data-view='grid'] {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
 }
 
 .product-card-list[data-view='grid'] .product-card {
@@ -743,32 +581,11 @@ button {
 }
 
 .product-table tbody tr {
-  animation: product-row-in 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .product-table tbody tr[data-top-pick='true'] {
   background: color-mix(in oklab, var(--accent) 9%, var(--surface));
   box-shadow: inset 3px 0 var(--accent);
-}
-
-.product-table tbody tr:nth-child(2) {
-  animation-delay: 45ms;
-}
-
-.product-table tbody tr:nth-child(3) {
-  animation-delay: 90ms;
-}
-
-.product-table tbody tr:nth-child(4) {
-  animation-delay: 135ms;
-}
-
-.product-table tbody tr:nth-child(5) {
-  animation-delay: 180ms;
-}
-
-.product-table tbody tr:nth-child(6) {
-  animation-delay: 225ms;
 }
 
 .product-table tbody tr:last-child th,
@@ -814,28 +631,6 @@ button {
   -webkit-line-clamp: 2;
 }
 
-@keyframes product-arrangement-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px) scale(0.985);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes product-row-in {
-  from {
-    opacity: 0;
-    transform: translateX(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 .product-card {
   display: grid !important;
   min-height: 13.5rem;
@@ -844,7 +639,7 @@ button {
   gap: 0 !important;
   overflow: hidden;
   padding: 0.7rem !important;
-  border-radius: 1.25rem !important;
+  border-radius: 1.6rem !important;
   border: 1px solid var(--border);
   background: var(--surface) !important;
   box-shadow:
@@ -928,7 +723,7 @@ button {
   justify-content: space-between;
   gap: 0.75rem;
   color: var(--text-muted);
-  font-size: 0.66rem;
+  font-size: 0.75rem;
 }
 
 .product-source-row span {
@@ -995,7 +790,7 @@ button {
   display: -webkit-box;
   overflow: hidden;
   color: var(--foreground) !important;
-  font-size: 0.92rem !important;
+  font-size: 1rem !important;
   font-weight: 640 !important;
   letter-spacing: -0.02em;
   line-height: 1.28;
@@ -1007,8 +802,8 @@ button {
   display: -webkit-box;
   overflow: hidden;
   color: var(--text-secondary) !important;
-  font-size: 0.72rem !important;
-  line-height: 1.5;
+  font-size: 0.82rem !important;
+  line-height: 1.55;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
@@ -1034,7 +829,7 @@ button {
 
 .product-offer-details span {
   color: var(--text-muted);
-  font-size: 0.56rem;
+  font-size: 0.7rem;
   font-weight: 650;
   letter-spacing: 0.055em;
   text-transform: uppercase;
@@ -1045,7 +840,7 @@ button {
   margin: 0;
   overflow: hidden;
   color: var(--text-secondary);
-  font-size: 0.68rem;
+  font-size: 0.82rem;
   line-height: 1.4;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -1053,6 +848,7 @@ button {
 
 .product-analysis {
   display: flex;
+  flex-wrap: wrap;
   min-width: 0;
   align-items: center;
   justify-content: space-between;
@@ -1065,7 +861,7 @@ button {
 
 .product-analysis > span {
   color: var(--text-muted);
-  font-size: 0.54rem;
+  font-size: 0.7rem;
   font-weight: 650;
   letter-spacing: 0.055em;
   text-transform: uppercase;
@@ -1075,7 +871,7 @@ button {
 .product-analysis small {
   overflow: hidden;
   color: var(--text-muted);
-  font-size: 0.58rem;
+  font-size: 0.75rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1086,6 +882,7 @@ button {
 
 .product-analysis ul {
   display: flex;
+  flex-wrap: wrap;
   margin: 0;
   padding: 0;
   gap: 0.55rem;
@@ -1097,7 +894,7 @@ button {
   align-items: center;
   gap: 0.28rem;
   color: var(--text-secondary);
-  font-size: 0.58rem;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
@@ -1134,12 +931,13 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.5rem 0.1rem;
+  min-height: 2.75rem;
+  padding: 0.6rem 0.1rem;
   border: 0;
   background: none;
   color: var(--accent-soft-foreground);
   cursor: pointer;
-  font-size: 0.68rem;
+  font-size: 0.82rem;
   font-weight: 650;
 }
 
@@ -1161,7 +959,7 @@ button {
 
 .product-details-kicker {
   color: var(--text-muted);
-  font-size: 0.56rem;
+  font-size: 0.7rem;
   font-weight: 650;
   letter-spacing: 0.055em;
   text-transform: uppercase;
@@ -1170,7 +968,7 @@ button {
 .product-details-summary {
   margin: 0;
   color: var(--text-secondary);
-  font-size: 0.68rem;
+  font-size: 0.85rem;
   line-height: 1.45;
 }
 
@@ -1190,7 +988,7 @@ button {
   align-items: baseline;
   gap: 0.45rem;
   color: var(--text-secondary);
-  font-size: 0.68rem;
+  font-size: 0.82rem;
   line-height: 1.45;
 }
 
@@ -1214,7 +1012,7 @@ button {
   align-items: baseline;
   gap: 0.45rem;
   color: var(--text-secondary);
-  font-size: 0.68rem;
+  font-size: 0.82rem;
   line-height: 1.45;
 }
 
@@ -1248,7 +1046,7 @@ button {
   align-items: center;
   gap: 0.35rem 0.65rem;
   padding-top: 0.35rem;
-  font-size: 0.62rem;
+  font-size: 0.75rem;
 }
 
 .product-validation-sources > span {
@@ -1293,7 +1091,7 @@ button {
 .product-details-meta {
   margin: 0;
   color: var(--text-muted);
-  font-size: 0.62rem;
+  font-size: 0.75rem;
 }
 
 .product-footer {
@@ -1307,7 +1105,7 @@ button {
 
 /* Seller reliability: compact HeroUI Meter */
 .seller-reliability {
-  width: min(9rem, 65%);
+  width: min(11rem, 65%);
 }
 
 .seller-reliability-row {
@@ -1315,7 +1113,7 @@ button {
   align-items: baseline;
   justify-content: space-between;
   gap: 0.5rem;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
 }
 
 .seller-reliability-row span {
@@ -1327,7 +1125,7 @@ button {
 
 .seller-reliability [data-slot='meter-output'] {
   color: var(--text-secondary);
-  font-size: 0.64rem;
+  font-size: 0.8rem;
   font-weight: 720;
 }
 
@@ -1343,20 +1141,23 @@ button {
   display: block;
   margin-top: 0.22rem;
   color: var(--text-muted);
-  font-size: 0.52rem;
+  font-size: 0.7rem;
   text-transform: capitalize;
 }
 
 .product-footer .link {
+  min-height: 2.75rem;
+  align-items: center;
   color: var(--accent-soft-foreground);
-  font-size: 0.7rem;
+  font-size: 0.82rem;
   font-weight: 620;
 }
 
 .product-drawer {
-  max-height: min(82svh, 46rem) !important;
+  max-height: min(82dvh, 46rem) !important;
+  border: 1px solid var(--border);
   border-radius: 1.65rem 1.65rem 0 0 !important;
-  background: var(--background) !important;
+  background: var(--surface) !important;
 }
 
 .product-drawer-header {
@@ -1378,25 +1179,6 @@ button {
   from {
     opacity: 0;
     transform: translateY(-0.25rem);
-  }
-}
-
-@keyframes drift {
-  to {
-    transform: rotate(1turn);
-  }
-}
-
-@keyframes breathe {
-  50% {
-    transform: scale(0.96);
-  }
-}
-
-@keyframes listen {
-  50% {
-    opacity: calc(0.24 + var(--level) * 0.25);
-    transform: scale(1.06);
   }
 }
 
@@ -1430,6 +1212,7 @@ button {
 
 @media (max-width: 899px) {
   .voice-stage {
+    --stage-top: max(8rem, calc(env(safe-area-inset-top) + 7rem));
     --stage-pad: 1rem;
     --sidebar-space: 0rem;
     padding-left: var(--stage-pad);
@@ -1443,13 +1226,9 @@ button {
   .commerce-agent,
   .commerce-agent.has-products {
     width: 100%;
-    height: calc(100svh - var(--stage-top) - var(--stage-pad));
+    height: auto;
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
-  }
-
-  .commerce-agent.has-products .voice-agent {
-    transform: none;
   }
 
   .desktop-product-panel {
@@ -1457,7 +1236,7 @@ button {
   }
 
   .voice-orb {
-    width: min(47vw, 190px) !important;
+    width: clamp(148px, 47vw, 220px) !important;
   }
 
   .product-card {
@@ -1475,17 +1254,17 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orb-halo,
-  .orb-shell,
-  .orb-shell::before,
   .product-analysis[data-state='pending'] small,
   .product-saved-indicator {
     animation: none !important;
   }
 
-  .product-arrangement,
-  .product-table tbody tr {
+  *,
+  *::before,
+  *::after {
     animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -1496,14 +1275,16 @@ body {
 
 .account-bar {
   position: fixed;
-  z-index: 100;
+  z-index: 40;
   top: 0;
   left: 0;
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  padding: 1.1rem clamp(1rem, 3vw, 2.25rem);
+  padding: max(1rem, env(safe-area-inset-top)) max(1.25rem, env(safe-area-inset-right)) 0.75rem
+    max(1.25rem, env(safe-area-inset-left));
+  background: linear-gradient(var(--background) 65%, transparent);
   pointer-events: none;
 }
 
@@ -1513,6 +1294,10 @@ body {
 }
 
 .brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
   padding: 0.5rem;
   border: 0;
   color: var(--foreground);
@@ -1524,14 +1309,14 @@ body {
 }
 
 .brand-mark span {
-  color: var(--accent-soft-foreground);
+  color: var(--foreground);
 }
 
 .brand-mark img {
   /* logo.svg viewBox is 788x826; size by height so it never distorts */
   display: block;
   width: auto;
-  height: 2.25rem;
+  height: 1.65rem;
   /* The source artwork is white; force the intended monochrome treatment per theme. */
   filter: brightness(0);
 }
@@ -1605,8 +1390,8 @@ body {
 .account-avatar,
 .profile-avatar {
   flex: none;
-  color: var(--accent) !important;
-  background: linear-gradient(150deg, oklch(0.4 0.075 130.98), oklch(0.24 0.03 135.02)) !important;
+  color: var(--accent-soft-foreground) !important;
+  background: var(--accent-soft) !important;
 }
 
 .account-trigger-copy {
@@ -1699,10 +1484,10 @@ body {
 .profile-stage {
   width: 100%;
   height: 100svh;
+  height: 100dvh;
   overflow-y: auto;
   padding: 6.4rem 1.25rem 4rem;
-  background:
-    radial-gradient(circle at 72% 5%, var(--page-glow), transparent 34rem), var(--background);
+  background: var(--brand-background);
 }
 
 .profile-shell {
@@ -1738,7 +1523,7 @@ body {
   text-transform: uppercase;
 }
 
-/* Brand tick: small chartreuse square that marks every kicker label */
+/* Shared brand marker. */
 .eyebrow::before {
   width: 0.42rem;
   height: 0.42rem;
@@ -1755,10 +1540,6 @@ body {
   font-weight: 680;
   letter-spacing: -0.055em;
   line-height: 1;
-}
-
-:root[data-theme='light'] .profile-intro h1 {
-  color: oklch(0.145 0.02 129.55);
 }
 
 .profile-intro p {
@@ -1856,7 +1637,7 @@ body {
 .auth-form [data-slot='input'] {
   border: 1px solid var(--border);
   background: var(--surface);
-  font-size: 0.8rem;
+  font-size: 1rem;
 }
 
 .form-actions {
@@ -1938,18 +1719,18 @@ body {
   height: 2.6rem;
   border: 1px solid rgba(80, 86, 60, 0.14);
   border-radius: 0.58rem;
-  background: #f5f4ec;
-  box-shadow: inset 0 0 0 0.55rem #fefdf9;
+  background: #faf7f2;
+  box-shadow: inset 0 0 0 0.55rem #e8e0f5;
 }
 
 .theme-preview-dark {
   border-color: rgba(255, 255, 255, 0.12);
-  background: #171b10;
-  box-shadow: inset 0 0 0 0.55rem #242a19;
+  background: #1c1924;
+  box-shadow: inset 0 0 0 0.55rem #3b3247;
 }
 
 .theme-preview-system {
-  background: linear-gradient(90deg, #f5f4ec 50%, #171b10 50%);
+  background: linear-gradient(90deg, #faf7f2 50%, #1c1924 50%);
   box-shadow: inset 0 0 0 0.55rem rgba(126, 132, 106, 0.24);
 }
 
@@ -2080,10 +1861,10 @@ body {
   display: grid;
   width: 100%;
   height: 100svh;
+  height: 100dvh;
   overflow-y: auto;
   padding: 7rem 1.25rem 3rem;
-  background:
-    radial-gradient(circle at 22% 15%, var(--page-glow), transparent 31rem), var(--background);
+  background: var(--brand-background);
 }
 
 .auth-loading-stage {
@@ -2174,7 +1955,8 @@ body {
 
 @media (max-width: 699px) {
   .account-bar {
-    padding: 0.75rem;
+    padding: max(0.75rem, env(safe-area-inset-top)) max(0.75rem, env(safe-area-inset-right)) 0.75rem
+      max(0.75rem, env(safe-area-inset-left));
   }
 
   .brand-mark {
@@ -2183,7 +1965,7 @@ body {
 
   .brand-mark img {
     width: auto;
-    height: 2rem;
+    height: 1.5rem;
   }
 
   .account-trigger-copy,
@@ -2197,7 +1979,7 @@ body {
   }
 
   .voice-stage {
-    --stage-top: 4.5rem;
+    --stage-top: max(8rem, calc(env(safe-area-inset-top) + 7rem));
   }
 
   .profile-stage {

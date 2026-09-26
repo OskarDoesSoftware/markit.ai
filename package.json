@@ -16,7 +16,9 @@
     "deploy": "bun run verify && wrangler deploy -c dist/server/wrangler.json",
     "deploy:presentation": "wrangler deploy -c presentation/wrangler.toml",
     "test:presentation": "playwright test --config presentation/playwright.config.ts",
-    "images:presentation": "bun presentation/scripts/generate-artwork.ts"
+    "images:presentation": "bun presentation/scripts/generate-artwork.ts",
+    "images:branding": "bun scripts/generate-branding.ts",
+    "test:app": "playwright test --config tests/browser/playwright.config.ts"
   },
   "dependencies": {
     "@gravity-ui/icons": "^2.20.0",
@@ -26,6 +28,7 @@
     "ai": "^7.0.22",
     "better-auth": "^1.6.23",
     "drizzle-orm": "^0.45.2",
+    "motion": "13.4.4",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "zod": "^4.4.3"

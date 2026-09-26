@@ -60,6 +60,9 @@ function applyTheme(preference: ThemePreference) {
       : preference
   document.documentElement.dataset.theme = resolved
   document.documentElement.style.colorScheme = resolved
+  for (const meta of document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')) {
+    meta.content = resolved === 'dark' ? '#1c1924' : '#faf7f2'
+  }
 }
 
 function accountProfile(user: AuthUser): AccountProfile {
@@ -247,9 +250,15 @@ export function AccountBar() {
 
   return (
     <header className="account-bar">
-      <button className="brand-mark" type="button" onClick={() => void navigate({ to: '/' })}>
-        <img src="/logo.svg" alt="markit.ai" />
-      </button>
+      <Button
+        variant="ghost"
+        className="brand-mark"
+        aria-label="Markit.ai, back to assistant"
+        onPress={() => void navigate({ to: '/' })}
+      >
+        <img src="/logo.svg" alt="" />
+        <span>markit.ai</span>
+      </Button>
       <div className="account-actions">
         {isLoading ? (
           <div className="account-loading" aria-label="Loading account">

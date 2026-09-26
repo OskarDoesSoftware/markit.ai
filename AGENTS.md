@@ -52,6 +52,9 @@ Use `bun oxlint --type-aware` as the source of truth for linting and type analys
 - HeroUI interactions use `onPress`, not `onClick`.
 - Keep `resolve.dedupe: ['react', 'react-dom']` in Vite. A single React copy is required by React Aria overlays.
 - Use Tailwind v4 and the design tokens in `src/index.css`.
+- The demo shares the presentation's soft lavender/peach/mint identity. Read
+  [brand and motion guidance](docs/brand-and-motion.md) for theme ownership,
+  Motion animations, subscription-only OG generation, and browser checks.
 - The primary interface is a voice orb plus a compact live agent-status indicator. Product cards are the only secondary surface: desktop results open in the right-hand panel and shift the orb left; viewports below 900px must use a controlled HeroUI v3 bottom `Drawer`.
 - Voice transport uses the same-origin `/api/realtime` WebSocket proxy to OpenAI's `gpt-realtime-2.1` model. Keep the API key server-side as the `OPENAI_API_KEY` Worker secret.
 - Authenticated voice conversations are persistent application-owned threads. D1 stores session metadata, user/assistant transcripts, and restorable product state; `/api/conversations` owns schema bootstrapping, listing, and creation. The selected conversation ID is passed to `/api/realtime`, prior transcript is restored into trusted session context, and realtime transcription events update the thread. Navigating back to Assistant must preserve the selected thread; only the explicit New thread/reset control creates a fresh one.

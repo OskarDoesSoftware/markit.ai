@@ -1,0 +1,83 @@
+.brand-orb {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+  perspective: 800px;
+  isolation: isolate;
+}
+
+.brand-orb-sphere {
+  position: absolute;
+  inset: 5%;
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--orb-line);
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 30% 24%, #ffffffdc, transparent 37%),
+    radial-gradient(ellipse at 76% 27%, var(--brand-peach), transparent 60%),
+    radial-gradient(ellipse at 65% 82%, var(--brand-mint), transparent 55%), var(--brand-lavender);
+  box-shadow: var(--orb-shadow);
+}
+
+.brand-orb-light {
+  position: absolute;
+  inset: 8% 18% 54% 12%;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ffffffb0, transparent 80%);
+  transform: rotate(-24deg);
+}
+
+.brand-orb-core {
+  position: absolute;
+  inset: 25%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff70, transparent 72%);
+}
+
+.brand-orb-glow {
+  position: absolute;
+  inset: -24%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--brand-lavender), transparent 68%);
+}
+
+.brand-orb-signal {
+  position: absolute;
+  inset: -14%;
+  display: block;
+  transform-style: preserve-3d;
+}
+
+.brand-orb-orbit {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border: 1.5px solid var(--orb-ribbon);
+  border-radius: 50%;
+  box-shadow: 0 1px 0 var(--orb-line);
+  transform-style: preserve-3d;
+}
+
+.brand-orb-orbit:nth-child(2) {
+  inset: 3%;
+}
+.brand-orb-orbit:nth-child(3) {
+  inset: 6%;
+}
+
+.brand-orb-bead {
+  position: absolute;
+  top: 10%;
+  left: 17%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--orb-ribbon);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--orb-ribbon) 12%, transparent);
+}
+
+.voice-orb[data-state='error'] .brand-orb-sphere {
+  opacity: 0.65;
+}

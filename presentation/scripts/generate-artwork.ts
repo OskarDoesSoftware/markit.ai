@@ -1,16 +1,15 @@
 import { createHash } from 'node:crypto'
 import { mkdir } from 'node:fs/promises'
-import { homedir } from 'node:os'
 import { join } from 'node:path'
 
 import sharp from 'sharp'
-import { z } from 'zod'
+
+import { chatModel, generateSubscriptionImage } from '../../scripts/subscription-image'
 
 const root = join(import.meta.dir, '..')
 const output = join(root, 'public', 'art')
 const imageModel =
   process.argv.find((arg) => arg.startsWith('--model='))?.slice(8) ?? 'gpt-2.5-sunburst'
-const chatModel = 'gpt-5.6-sol'
 const direction =
   'Premium editorial still life for Markit.ai, a voice-first shopping research assistant. ' +
   'Soft lavender #dcd4ff, warm peach #ffd9c9, pale mint #cff3df and warm ivory #faf7f2. ' +
@@ -52,56 +51,6 @@ if (process.argv.includes('--portraits')) {
 const selected = process.argv.filter((arg) => Object.hasOwn(briefs, arg))
 if (!selected.length) throw new Error(`Select an artwork slug: ${Object.keys(briefs).join(', ')}`)
 
-const authPath = join(
-  process.env.PI_CODING_AGENT_DIR ?? join(homedir(), '.pi', 'agent'),
-  'auth.json',
-)
-const authFile: unknown = await Bun.file(authPath).json()
-const auth = z
-  .object({
-    'openai-codex': z.object({ access: z.string().min(1), accountId: z.string().min(1) }),
-  })
-  .parse(authFile)['openai-codex']
-
-const eventSchema = z.object({
-  type: z.string(),
-  item: z.object({ type: z.string(), result: z.string().optional() }).optional(),
-})
-
-async function readImage(body: ReadableStream<Uint8Array>) {
-  let pending = ''
-  let image: string | undefined
-  let completed = false
-  const decoder = new TextDecoder()
-  function consume(line: string) {
-    if (!line.startsWith('data:')) return
-    const data = line.slice(5).trim()
-    if (!data || data === '[DONE]') return
-    const event = eventSchema.parse(JSON.parse(data))
-    if (['error', 'response.failed', 'response.incomplete'].includes(event.type)) {
-      throw new Error(`Generation stopped (${event.type}); no retry or credential fallback.`)
-    }
-    if (
-      event.type === 'response.output_item.done' &&
-      event.item?.type === 'image_generation_call'
-    ) {
-      image = event.item.result
-    }
-    if (event.type === 'response.completed') completed = true
-  }
-  for await (const chunk of body) {
-    pending += decoder.decode(chunk, { stream: true })
-    let boundary: number
-    while ((boundary = pending.indexOf('\n')) !== -1) {
-      consume(pending.slice(0, boundary).trimEnd())
-      pending = pending.slice(boundary + 1)
-    }
-  }
-  consume(pending + decoder.decode())
-  if (!image || !completed) throw new Error('No completed image result; no assets written.')
-  return Buffer.from(image, 'base64')
-}
-
 for (const slug of selected) {
   const brief = briefs[slug as keyof typeof briefs]
   if (
@@ -112,34 +61,7 @@ for (const slug of selected) {
     continue
   }
   const prompt = `${brief}\n\n${direction}`
-  const response = await fetch('https://chatgpt.com/backend-api/codex/responses', {
-    method: 'POST',
-    signal: AbortSignal.timeout(300_000),
-    headers: {
-      Authorization: `Bearer ${auth.access}`,
-      'chatgpt-account-id': auth.accountId,
-      originator: 'pi',
-      'OpenAI-Beta': 'responses=experimental',
-      Accept: 'text/event-stream',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: chatModel,
-      instructions: `Call image_generation exactly once with model ${imageModel}. Follow the brief.`,
-      store: false,
-      stream: true,
-      input: [{ type: 'message', role: 'user', content: [{ type: 'input_text', text: prompt }] }],
-      tools: [{ type: 'image_generation', model: imageModel, size: '1024x1024' }],
-      tool_choice: { type: 'image_generation' },
-    }),
-  })
-  if (!response.ok || !response.body) {
-    // Never print upstream bodies: providers may echo request or account details.
-    throw new Error(
-      `Image generation HTTP ${response.status} for ${imageModel}; stopped without retry.`,
-    )
-  }
-  const image = await readImage(response.body)
+  const image = await generateSubscriptionImage(prompt, '1024x1024', imageModel)
   const files = []
   for (const width of [640, 1024]) {
     const name = width === 1024 ? `${slug}.webp` : `${slug}-${width}.webp`

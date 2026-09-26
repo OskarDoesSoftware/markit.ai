@@ -59,6 +59,10 @@ used with `gpt-5.6-sol` orchestration. Prompts, generation time, model IDs, and
 output hashes live in `artwork/*.json`. Generated images are conceptual artwork,
 not evidence of a product, price, seller, or live assistant state.
 
+The shared authentication/streaming client is `../scripts/subscription-image.ts`.
+The [app branding generator](../docs/brand-and-motion.md#how-are-og-artwork-and-icons-reproduced)
+owns the presentation's marked social metadata block and shared OG image.
+
 ```bash
 # Existing Pi subscription login; never a separately billed API-key fallback.
 bun run images:presentation coffee-ritual voice-orbit

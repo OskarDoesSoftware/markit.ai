@@ -1,0 +1,194 @@
+.voice-intro {
+  max-width: 35rem;
+  text-align: center;
+}
+
+.voice-intro .eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+.voice-intro h1 {
+  margin: 0.8rem 0 0.85rem;
+  color: var(--foreground);
+  font-size: clamp(2.5rem, 4.2vw, 4rem);
+  font-weight: 620;
+  letter-spacing: -0.065em;
+  line-height: 1.08;
+}
+.voice-intro h1 span {
+  color: var(--accent-soft-foreground);
+}
+.voice-intro p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.voice-orb-frame {
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  margin-block: 0.4rem;
+}
+.voice-orb {
+  position: relative;
+  display: block;
+  width: clamp(180px, 21vw, 260px) !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: 1;
+  overflow: visible !important;
+  padding: 0 !important;
+  border: 0;
+  border-radius: 50%;
+  background: transparent !important;
+}
+.voice-orb:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 20px;
+}
+.voice-guidance {
+  max-width: 27rem;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  text-align: center;
+}
+.has-products .voice-intro h1 {
+  font-size: clamp(2rem, 3vw, 3.2rem);
+}
+.has-products .voice-intro p {
+  font-size: 0.85rem;
+}
+.has-products .voice-orb {
+  width: clamp(155px, 17vw, 215px) !important;
+}
+
+.mobile-workspace-trigger {
+  position: fixed;
+  top: max(4.9rem, calc(env(safe-area-inset-top) + 4.1rem));
+  left: max(1.25rem, env(safe-area-inset-left));
+  z-index: 35;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+.mobile-workspace-trigger svg {
+  width: 1rem;
+  height: 1rem;
+}
+.workspace-drawer {
+  border: 1px solid var(--border);
+  background: var(--surface) !important;
+}
+.workspace-drawer .drawer__body {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+.workspace-drawer .main-sidebar-heading {
+  display: none;
+}
+.workspace-drawer .sidebar-note {
+  margin-top: 1rem;
+}
+.workspace-drawer .sidebar-sessions {
+  max-height: 30dvh;
+}
+.workspace-drawer .sidebar-link {
+  min-height: 3rem !important;
+  font-size: 0.9rem !important;
+}
+.workspace-drawer .sidebar-session {
+  min-height: 3rem !important;
+  font-size: 0.85rem !important;
+}
+.product-card-motion {
+  min-width: 0;
+}
+
+@media (min-width: 900px) and (max-width: 1199px) {
+  .has-products .voice-intro h1 {
+    font-size: 2rem;
+  }
+  .has-products .voice-intro .eyebrow {
+    font-size: 0.65rem;
+  }
+  .desktop-product-panel .product-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .desktop-product-panel .product-image {
+    height: 10rem;
+  }
+  .desktop-product-panel .product-card-copy {
+    padding: 1rem 0.4rem 0.3rem;
+  }
+}
+
+@media (max-width: 899px) {
+  .voice-intro h1 {
+    font-size: clamp(2.5rem, 7vw, 3.7rem);
+  }
+  .voice-intro p {
+    max-width: 26rem;
+    font-size: 0.9rem;
+  }
+  .voice-orb-frame {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 599px) {
+  .product-drawer .product-card {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0.75rem !important;
+  }
+  .product-drawer .product-image {
+    height: 11rem;
+  }
+  .product-drawer .product-card-copy {
+    padding: 1rem 0.25rem 0.25rem;
+  }
+  .product-drawer .product-title {
+    font-size: 1.05rem !important;
+  }
+  .product-drawer .product-description {
+    font-size: 0.88rem !important;
+  }
+  .product-footer {
+    flex-wrap: wrap;
+  }
+  .product-drawer .drawer__heading {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-height: 740px) {
+  .voice-agent {
+    gap: 1.1rem;
+  }
+  .voice-intro h1 {
+    font-size: clamp(2.25rem, 4vw, 3rem);
+  }
+  .voice-orb-frame {
+    margin-block: 0;
+    padding: 0.8rem;
+  }
+  .voice-orb {
+    width: clamp(148px, 22vh, 195px) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-orb-frame {
+    transform: none !important;
+  }
+}
