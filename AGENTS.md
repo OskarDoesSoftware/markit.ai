@@ -75,6 +75,18 @@ Use `bun oxlint --type-aware` as the source of truth for linting and type analys
 - Keep secrets out of source, docs, Git, and command output. Local secrets belong in ignored `.env` or `.dev.vars` files; production secrets belong in Cloudflare Worker secrets.
 - Do not commit generated build output (`dist`) or dependencies (`node_modules`).
 
+## Purchase-agent roadmap (not implemented)
+
+The current product researches live listings; it does not place orders, charge a payment method, maintain purchase mandates, or issue receipts or Wallet passes. Keep those capabilities clearly labelled as proposed until code and end-to-end verification support them. Preserve the existing `search_products` → `validate_product_results` workflow and its hard budget filtering when extending discovery toward purchasing.
+
+For a future purchase flow, normalize a shopper's request into a structured brief with product and variant requirements, quantity, currency, a hard final-price cap, delivery constraints, seller restrictions, and explicitly permitted alternatives. Ask only for material missing details; permission to search or view alternatives is not permission to buy. A failed hard requirement cannot be outweighed by a fit score. When no exact eligible offer exists, offer waiting or explicitly allowed alternatives without silently relaxing the brief.
+
+Separate model interpretation and evidence gathering from deterministic authorization. A proposed server-side policy should verify the exact product, seller, delivery requirements, and final payable amount, including shipping, taxes, duties, fees, valid discounts, and currency conversion. Unknown charges, an unverified checkout total, or any amount above the cap must block automatic purchase. A listing audit or search result alone is not payment authorization.
+
+Autonomous purchasing would require an explicit, scoped, expiring, revocable mandate and a fresh authorization bound to the verified merchant, product, quantity, amount, currency, and mandate version. Changes to hard criteria or spending scope require renewed consent. Recheck the final quote and mandate immediately before execution, use idempotency to prevent duplicate orders, and keep payment credentials outside model and browser context. A checkout or payment simulator, if introduced for a demo, must be labelled as simulated and must never imply that money moved.
+
+After an actual or clearly simulated purchase, a future flow could create separate merchant and decision receipts, with evidence and reason codes rather than hidden model reasoning. Apple Wallet, Google Wallet, or an in-app pass is a further integration goal; never claim a pass exists or was added before generation succeeds.
+
 ## Deployment
 
 The standalone presentation/demo deck lives in `presentation/`, separately from
