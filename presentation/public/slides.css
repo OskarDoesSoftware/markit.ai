@@ -14,16 +14,74 @@
     isolation: isolate;
     border: 1px solid #ffffffa6;
     border-radius: 45% 45% 2rem 2rem;
-    background:
-      radial-gradient(ellipse at 70% 18%, #f9e1d6, transparent 65%),
-      linear-gradient(150deg, #e1d7ee, #dcece3);
+    background: linear-gradient(172deg, #e4dbf1 0%, #ebe3f1 45%, #dde9e3 100%);
   }
+  /* The dense product grid Jan is escaping: visible at the edges, cleared by his voice. */
   .hero-visual::before {
     position: absolute;
-    inset: 12% 10%;
-    border: 1px solid #ffffff80;
-    border-radius: 50%;
+    z-index: -1;
+    inset: 0;
+    background:
+      linear-gradient(#ffffffb3 1px, transparent 1px) center / 100% 1.75rem,
+      linear-gradient(90deg, #ffffffb3 1px, transparent 1px) center / 1.75rem 100%;
+    mask-image: radial-gradient(circle at 42% 32%, transparent 0 28%, #000 70%);
+    opacity: 0.7;
     content: '';
+  }
+  .voice-field {
+    position: absolute;
+    z-index: -1;
+    bottom: 0;
+    width: 100%;
+    height: 94%;
+    overflow: visible;
+  }
+  .voice-rings circle {
+    stroke: #fff;
+    stroke-width: 1.25;
+    vector-effect: non-scaling-stroke;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .voice-rings circle:nth-child(1) {
+    stroke: #9e85bb;
+    stroke-width: 1.5;
+  }
+  .voice-rings circle:nth-child(2) {
+    stroke: #b7a2cf;
+  }
+  .voice-rings circle:nth-child(4) {
+    opacity: 0.75;
+  }
+  .voice-rings circle:nth-child(5) {
+    opacity: 0.5;
+  }
+  .voice-rings circle:nth-child(6) {
+    opacity: 0.3;
+  }
+  .slide.is-active .voice-rings circle {
+    animation: voice-ring-in 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .slide.is-active .voice-rings circle:nth-child(2) {
+    animation-delay: 90ms;
+  }
+  .slide.is-active .voice-rings circle:nth-child(3) {
+    animation-delay: 180ms;
+  }
+  .slide.is-active .voice-rings circle:nth-child(4) {
+    animation-delay: 270ms;
+  }
+  .slide.is-active .voice-rings circle:nth-child(5) {
+    animation-delay: 360ms;
+  }
+  .slide.is-active .voice-rings circle:nth-child(6) {
+    animation-delay: 450ms;
+  }
+  @keyframes voice-ring-in {
+    from {
+      opacity: 0;
+      transform: scale(0.7);
+    }
   }
   .jan-portrait {
     position: absolute;
