@@ -42,6 +42,10 @@ The worker name is `markit-ai-presentation`. Pushes to `main` also deploy it aut
   `slides.css` owns compositions; `responsive.css` owns viewport adaptations.
 - `public/deck.js` handles navigation, fullscreen, keyboard controls, and touch gestures.
 
+The Worker caches non-HTML assets for an hour. Bump the `?v=` revision on changed
+stylesheet/script links in `index.html` so returning visitors do not combine a
+new deck with cached code from an earlier release.
+
 ## Artwork and credentials
 
 The soft lavender, peach, and mint direction reinterprets the original
