@@ -1,9 +1,9 @@
-import { ArrowUpRightFromSquare } from '@gravity-ui/icons'
-import { Button, Drawer, Link } from '@heroui/react'
+import { Button, Drawer } from '@heroui/react'
 import { motion, useReducedMotion } from 'motion/react'
 import { useEffect, useState } from 'react'
 
 import { downloadCsv } from '@/csv'
+import type { ProductPanelState } from '@/product-panel-state'
 import type {
   ProductAnalysis,
   ProductCardData,
@@ -13,6 +13,12 @@ import type {
 import { useIsMobile } from '@/use-is-mobile'
 
 import { ProductCards } from './ProductCards'
+import {
+  ProductPanelStatus,
+  ProductVoiceControls,
+  type ProductVoiceControlsProps,
+} from './ProductPanelStatus'
+import { ProductTable } from './ProductTable'
 
 const SORT_LABELS: Record<ProductSortMode, string> = {
   relevance: 'Relevance',
@@ -37,79 +43,27 @@ function saveProductsCsv(products: ProductCardData[]) {
   )
 }
 
-function ProductTable({
-  products,
-  savedUrls,
-}: {
-  products: ProductCardData[]
-  savedUrls: ReadonlySet<string>
-}) {
-  return (
-    <div className="product-table-wrap">
-      <table className="product-table">
-        <thead>
-          <tr>
-            <th scope="col">Product</th>
-            <th scope="col">Price</th>
-            <th scope="col">Delivery</th>
-            <th scope="col">Reliability</th>
-            <th scope="col">Retailer</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product, index) => (
-            <tr data-top-pick={index === 0 || undefined} key={product.url}>
-              <th scope="row">
-                <div className="product-table-name">
-                  {product.image ? <img src={product.image} alt="" loading="lazy" /> : null}
-                  <span>
-                    <strong>{product.title}</strong>
-                    {index === 0 ? (
-                      <small className="product-top-pick-label">Top pick</small>
-                    ) : null}
-                    {savedUrls.has(product.url) ? <small>✓ Saved</small> : null}
-                  </span>
-                </div>
-              </th>
-              <td>{product.price || 'Not verified'}</td>
-              <td>{product.shipping || 'Not verified'}</td>
-              <td>
-                <strong>{product.sellerReliability.score}/100</strong>
-                <small>{product.sellerReliability.label}</small>
-              </td>
-              <td>
-                <Link href={product.url} target="_blank" rel="noopener noreferrer">
-                  {product.source}
-                  <ArrowUpRightFromSquare aria-hidden="true" />
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
-}
-
 function ProductPresentation({
   products,
   analyses,
   savedUrls,
   view,
-  sort,
   onSaveListings,
   saveState,
+  expandedUrls,
+  onExpandedChange,
 }: {
   products: ProductCardData[]
   analyses: Record<string, ProductAnalysis>
   savedUrls: ReadonlySet<string>
   view: ProductViewMode
-  sort: ProductSortMode
   onSaveListings: () => void
   saveState: 'idle' | 'saving' | 'saved' | 'error'
+  expandedUrls: ReadonlySet<string>
+  onExpandedChange: (url: string, value: boolean) => void
 }) {
   return (
-    <div className="product-arrangement" key={`${view}-${sort}`}>
+    <div className="product-arrangement">
       {view === 'table' ? (
         <>
           <div className="product-table-actions">
@@ -127,42 +81,54 @@ function ProductPresentation({
               {saveState === 'saving' ? 'Saving…' : 'Save to listings'}
             </Button>
           </div>
-          <ProductTable products={products} savedUrls={savedUrls} />
+          <ProductTable products={products} savedUrls={savedUrls} analyses={analyses} />
         </>
       ) : (
-        <ProductCards products={products} analyses={analyses} savedUrls={savedUrls} view={view} />
+        <ProductCards
+          products={products}
+          analyses={analyses}
+          savedUrls={savedUrls}
+          view={view}
+          expandedUrls={expandedUrls}
+          onExpandedChange={onExpandedChange}
+        />
       )}
     </div>
   )
 }
 
 export function ProductResults({
-  isOpen,
-  heading,
-  products,
-  analyses,
+  panel,
   savedUrls,
-  view,
-  sort,
+  voice,
 }: {
-  isOpen: boolean
-  heading: string
-  products: ProductCardData[]
-  analyses: Record<string, ProductAnalysis>
+  panel: ProductPanelState
   savedUrls: ReadonlySet<string>
-  view: ProductViewMode
-  sort: ProductSortMode
+  voice: ProductVoiceControlsProps
 }) {
+  const { heading, products, analyses, view, sort, stage, notice, researchId } = panel
   const isMobile = useIsMobile()
   const reduced = useReducedMotion()
-  const hasProducts = isOpen && products.length > 0
+  const isOpen = panel.isOpen
   const [locallySavedUrls, setLocallySavedUrls] = useState<ReadonlySet<string>>(new Set())
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
+  const [expandedUrls, setExpandedUrls] = useState<ReadonlySet<string>>(new Set())
   const allSavedUrls = new Set([...savedUrls, ...locallySavedUrls])
 
-  useEffect(() => setSaveState('idle'), [products])
+  useEffect(() => {
+    setSaveState('idle')
+    setExpandedUrls(new Set())
+  }, [researchId])
+  const onExpandedChange = (url: string, expanded: boolean) =>
+    setExpandedUrls((current) => {
+      const next = new Set(current)
+      if (expanded) next.add(url)
+      else next.delete(url)
+      return next
+    })
 
   const saveToListings = async () => {
+    if (stage !== 'ready' || !products.length) return
     setSaveState('saving')
     try {
       const response = await fetch('/api/listings', {
@@ -184,58 +150,72 @@ export function ProductResults({
     }
   }
 
-  return (
+  const content = (
     <>
-      <motion.aside
-        className="desktop-product-panel"
-        layoutScroll
-        data-open={hasProducts}
-        aria-hidden={!hasProducts}
-        inert={!hasProducts}
-        initial={false}
-        animate={{ opacity: hasProducts ? 1 : 0 }}
-        transition={{ duration: reduced ? 0 : 0.3 }}
-      >
-        <div className="product-panel-heading">
-          <div>
-            <span>Live commerce data</span>
-            <h2>{heading}</h2>
-          </div>
-          <small>
-            {view} · {SORT_LABELS[sort]} · {products.length} results
-          </small>
-        </div>
+      {panel.restored && stage === 'ready' ? (
+        <p className="product-panel-notice" role="status">
+          Previous research · prices and availability may have changed. Ask Markit to check again
+          before buying.
+        </p>
+      ) : null}
+      {notice ? (
+        <p className="product-panel-notice" role="status">
+          {notice}
+        </p>
+      ) : null}
+      {stage !== 'ready' || !products.length ? (
+        <ProductPanelStatus stage={stage} />
+      ) : (
         <ProductPresentation
           products={products}
           analyses={analyses}
           savedUrls={allSavedUrls}
           view={view}
-          sort={sort}
           onSaveListings={() => void saveToListings()}
           saveState={saveState}
+          expandedUrls={expandedUrls}
+          onExpandedChange={onExpandedChange}
         />
-      </motion.aside>
+      )}
+    </>
+  )
 
+  return (
+    <>
+      <motion.aside
+        className="desktop-product-panel"
+        layoutScroll
+        data-open={isOpen}
+        aria-hidden={!isOpen}
+        inert={!isOpen}
+        initial={false}
+        animate={{ opacity: isOpen ? 1 : 0 }}
+        transition={{ duration: reduced ? 0 : 0.3 }}
+      >
+        <div className="product-panel-heading">
+          <div>
+            <span>Product research</span>
+            <h2>{heading}</h2>
+          </div>
+          <small>
+            {stage === 'ready' && products.length
+              ? `${view} · ${SORT_LABELS[sort]} · ${products.length} results`
+              : 'Research status'}
+          </small>
+        </div>
+        {content}
+      </motion.aside>
       {isMobile ? (
-        <Drawer.Backdrop isOpen={hasProducts} isDismissable={false}>
+        <Drawer.Backdrop isOpen={isOpen} isDismissable={false}>
           <Drawer.Content placement="bottom">
             <Drawer.Dialog className="product-drawer">
               <Drawer.Handle />
               <Drawer.Header className="product-drawer-header">
-                <span>Live commerce data</span>
+                <span>Product research</span>
                 <Drawer.Heading>{heading}</Drawer.Heading>
+                <ProductVoiceControls {...voice} />
               </Drawer.Header>
-              <Drawer.Body className="product-drawer-body">
-                <ProductPresentation
-                  products={products}
-                  analyses={analyses}
-                  savedUrls={allSavedUrls}
-                  view={view}
-                  sort={sort}
-                  onSaveListings={() => void saveToListings()}
-                  saveState={saveState}
-                />
-              </Drawer.Body>
+              <Drawer.Body className="product-drawer-body">{content}</Drawer.Body>
             </Drawer.Dialog>
           </Drawer.Content>
         </Drawer.Backdrop>

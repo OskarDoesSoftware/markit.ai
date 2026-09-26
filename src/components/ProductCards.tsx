@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from 'motion/react'
 
 import type { ProductAnalysis, ProductCardData, ProductViewMode } from '@/product-types'
 
+import { ProductAnalysisStatus, ProductDecisionBadge } from './ProductAnalysisStatus'
 import { ProductValidationSources } from './ProductValidationSources'
 
 const RELIABILITY_COLOR = {
@@ -22,15 +23,23 @@ function formatListedDate(published: string | undefined): string | null {
 function ProductDetails({
   product,
   analysis,
+  isExpanded,
+  onExpandedChange,
 }: {
   product: ProductCardData
   analysis: ProductAnalysis | undefined
+  isExpanded: boolean
+  onExpandedChange: (value: boolean) => void
 }) {
   const listedDate = formatListedDate(product.publishedDate)
   const hasChecks = analysis?.status === 'complete' && analysis.checks.length > 0
 
   return (
-    <Disclosure className="product-details">
+    <Disclosure
+      className="product-details"
+      isExpanded={isExpanded}
+      onExpandedChange={onExpandedChange}
+    >
       <Disclosure.Heading className="product-details-heading">
         <Disclosure.Trigger className="product-details-trigger">
           View details
@@ -50,20 +59,26 @@ function ProductDetails({
             </section>
           ) : null}
 
-          {hasChecks ? (
+          {analysis ? (
             <section>
               <span className="product-details-kicker">Independent checks · {analysis.model}</span>
               {analysis.summary ? (
                 <p className="product-details-summary">{analysis.summary}</p>
               ) : null}
-              <ul className="product-check-list">
-                {analysis.checks.map((check) => (
-                  <li key={check.id} data-verdict={check.verdict}>
-                    <strong>{check.label}</strong>
-                    <span>{check.note}</span>
-                  </li>
-                ))}
-              </ul>
+              {hasChecks ? (
+                <ul className="product-check-list">
+                  {analysis.checks.map((check) => (
+                    <li key={check.id} data-verdict={check.verdict}>
+                      <strong>{check.label}</strong>
+                      <span>{check.note}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="product-details-summary">
+                  Independent checks are unavailable for this listing.
+                </p>
+              )}
               <ProductValidationSources analysis={analysis} />
             </section>
           ) : null}
@@ -86,54 +101,20 @@ function ProductDetails({
   )
 }
 
-function AnalysisChecks({ analysis }: { analysis: ProductAnalysis | undefined }) {
-  if (!analysis) {
-    return (
-      <div className="product-analysis" data-state="pending" role="status">
-        <span>Independent checks</span>
-        <small>Auditing listing…</small>
-      </div>
-    )
-  }
-
-  if (analysis.status === 'failed') {
-    return (
-      <div className="product-analysis" data-state="failed">
-        <span>Independent checks</span>
-        <small>Unavailable for this listing</small>
-      </div>
-    )
-  }
-
-  return (
-    <div className="product-analysis" data-state="complete" title={analysis.summary}>
-      <span>Independent checks</span>
-      <ul aria-label={`Independent listing checks by ${analysis.model}`}>
-        {analysis.checks.map((check) => (
-          <li
-            key={check.id}
-            data-verdict={check.verdict}
-            title={`${check.verdict}: ${check.note}`}
-            aria-label={`${check.label} check ${check.verdict}. ${check.note}`}
-          >
-            {check.label}
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
 export function ProductCards({
   products,
   analyses,
   savedUrls,
   view,
+  expandedUrls,
+  onExpandedChange,
 }: {
   products: ProductCardData[]
   analyses: Record<string, ProductAnalysis>
   savedUrls: ReadonlySet<string>
   view: Exclude<ProductViewMode, 'table'>
+  expandedUrls: ReadonlySet<string>
+  onExpandedChange: (url: string, value: boolean) => void
 }) {
   const reduced = useReducedMotion()
   return (
@@ -151,7 +132,7 @@ export function ProductCards({
             layout: { type: 'spring', stiffness: 150, damping: 26 },
           }}
         >
-          <Card className="product-card" data-top-pick={index === 0 || undefined}>
+          <Card className="product-card">
             <div className="product-image product-image-fallback" aria-hidden="true">
               {product.favicon ? (
                 <img src={product.favicon} alt="" />
@@ -176,11 +157,7 @@ export function ProductCards({
                 <div className="product-source-row">
                   <span>{product.source}</span>
                   <div className="product-source-meta">
-                    {index === 0 ? (
-                      <Chip color="accent" variant="soft" size="sm" className="product-top-pick">
-                        Top pick
-                      </Chip>
-                    ) : null}
+                    <ProductDecisionBadge analysis={analyses[product.url]} />
                     {savedUrls.has(product.url) ? (
                       <Chip
                         color="success"
@@ -224,8 +201,13 @@ export function ProductCards({
                   <p>{product.shipping || 'Cost not found in source'}</p>
                 </div>
               </Card.Content>
-              <AnalysisChecks analysis={analyses[product.url]} />
-              <ProductDetails product={product} analysis={analyses[product.url]} />
+              <ProductAnalysisStatus analysis={analyses[product.url]} />
+              <ProductDetails
+                product={product}
+                analysis={analyses[product.url]}
+                isExpanded={expandedUrls.has(product.url)}
+                onExpandedChange={(value) => onExpandedChange(product.url, value)}
+              />
               <Card.Footer className="product-footer">
                 <div
                   className="seller-reliability"

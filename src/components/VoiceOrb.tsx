@@ -1,12 +1,7 @@
 import { useMotionValue } from 'motion/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useReducer, useRef, useState } from 'react'
 
-import type {
-  ProductAnalysis,
-  ProductCardData,
-  ProductSortMode,
-  ProductViewMode,
-} from '@/product-types'
+import { initialProductPanel, reduceProductPanel } from '@/product-panel-state'
 import { INPUT_RATE, base64ToPcm, bytesToBase64, floatToPcm16, resample } from '@/realtime-audio'
 import type { ActiveOutput, AudioRuntime, RealtimeMessage } from '@/realtime-client-types'
 
@@ -23,14 +18,11 @@ const MAX_USER_TURN_MS = 5_000
 export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProps) {
   const [state, setState] = useState<OrbState>('idle')
   const [isMuted, setIsMuted] = useState(false)
-  const [productDisplay, setProductDisplay] = useState<{
-    isOpen: boolean
-    heading: string
-    products: ProductCardData[]
-    view: ProductViewMode
-    sort: ProductSortMode
-  }>({ isOpen: false, heading: 'Current picks', products: [], view: 'list', sort: 'relevance' })
-  const [analyses, setAnalyses] = useState<Record<string, ProductAnalysis>>({})
+  const [productDisplay, dispatchProducts] = useReducer(
+    reduceProductPanel,
+    undefined,
+    initialProductPanel,
+  )
   const [savedUrls, setSavedUrls] = useState<ReadonlySet<string>>(new Set())
   const socketRef = useRef<WebSocket | null>(null)
   const audioRef = useRef<AudioRuntime | null>(null)
@@ -43,6 +35,7 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
   const activeResponseRef = useRef<string | null>(null)
   const interruptedResponsesRef = useRef(new Set<string>())
   const toolActiveRef = useRef(false)
+  const activeToolCallRef = useRef<string | null>(null)
   const pendingToolCallRef = useRef<string | null>(null)
   const sessionReadyRef = useRef(false)
   const runningRef = useRef(false)
@@ -136,20 +129,14 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
     activeResponseRef.current = null
     interruptedResponsesRef.current.clear()
     toolActiveRef.current = false
+    activeToolCallRef.current = null
     pendingToolCallRef.current = null
     sessionReadyRef.current = false
     clearTurnDeadline()
     turnResponseRequestedRef.current = false
     setLevel(0)
     if (updateState && mountedRef.current) {
-      setProductDisplay({
-        isOpen: false,
-        heading: 'Current picks',
-        products: [],
-        view: 'list',
-        sort: 'relevance',
-      })
-      setAnalyses({})
+      dispatchProducts({ type: 'connection-lost' })
       setState('idle')
     }
   }
@@ -204,21 +191,24 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
       ) {
         activeOutputRef.current = null
         setLevel(0.08)
-        if (runningRef.current && !pendingToolCallRef.current) setState('listening')
+        if (runningRef.current && !toolActiveRef.current && !pendingToolCallRef.current)
+          setState('listening')
         signalToolReady()
       }
     })
   }
 
   const start = async () => {
-    if (runningRef.current) {
+    if (runningRef.current && state !== 'error') {
       shutdown()
       return
     }
+    if (runningRef.current) shutdown(false)
 
     mutedRef.current = false
     setIsMuted(false)
     runningRef.current = true
+    dispatchProducts({ type: 'connection-reset' })
     setState('connecting')
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -297,7 +287,7 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
 
         if (message.type === 'session.updated') {
           sessionReadyRef.current = true
-          setState('listening')
+          if (!toolActiveRef.current && !pendingToolCallRef.current) setState('listening')
         } else if (message.type === 'response.created') {
           clearTurnDeadline()
           turnResponseRequestedRef.current = true
@@ -306,7 +296,7 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
             haltPlayback()
           }
           activeResponseRef.current = responseId ?? null
-          setState('thinking')
+          if (!toolActiveRef.current && !pendingToolCallRef.current) setState('thinking')
         } else if (message.type === 'response.output_audio.delta') {
           if (
             !toolActiveRef.current &&
@@ -343,6 +333,7 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
           else if (message.status === 'thinking') setState('thinking')
           else if (message.status === 'search-error') setState('search-error')
           else if (message.status === 'validation-error') setState('validation-error')
+          else if (message.status === 'display-error') setState('display-error')
         } else if (message.type === 'markit.tool') {
           if (message.phase === 'waiting' && message.call_id) {
             pendingToolCallRef.current = message.call_id
@@ -350,10 +341,10 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
               socket.send(JSON.stringify({ type: 'input_audio_buffer.clear' }))
             }
             window.setTimeout(signalToolReady, 120)
-          } else {
-            toolActiveRef.current = message.phase === 'started'
-          }
-          if (message.phase === 'started') {
+          } else if (message.phase === 'started') {
+            activeToolCallRef.current = message.call_id ?? null
+            pendingToolCallRef.current = null
+            toolActiveRef.current = true
             setState(
               message.tool === 'search_products'
                 ? 'searching'
@@ -361,31 +352,17 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
                   ? 'validating'
                   : 'thinking',
             )
+          } else if (
+            message.phase === 'completed' &&
+            (!message.call_id ||
+              !activeToolCallRef.current ||
+              message.call_id === activeToolCallRef.current)
+          ) {
+            toolActiveRef.current = false
+            activeToolCallRef.current = null
           }
-        } else if (message.type === 'markit.products') {
-          if (message.action === 'show' && message.products?.length) {
-            setProductDisplay({
-              isOpen: true,
-              heading: message.heading || 'Current picks',
-              products: message.products,
-              view: message.view ?? productDisplay.view,
-              sort: message.sort ?? productDisplay.sort,
-            })
-          } else if (message.action === 'close') {
-            setProductDisplay({
-              isOpen: false,
-              heading: 'Current picks',
-              products: [],
-              view: 'list',
-              sort: 'relevance',
-            })
-            setAnalyses({})
-          }
-        } else if (message.type === 'markit.analysis') {
-          const { url, analysis } = message
-          if (url && analysis) {
-            setAnalyses((previous) => ({ ...previous, [url]: analysis }))
-          }
+        } else if (message.type === 'markit.products' || message.type === 'markit.analysis') {
+          dispatchProducts({ ...message, type: message.type })
         } else if (message.type === 'markit.conversation.updated') {
           onConversationUpdated()
         } else if (message.type === 'markit.listings' && message.listings?.length) {
@@ -401,16 +378,32 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
             activeResponseRef.current = null
           }
           turnResponseRequestedRef.current = false
+          if (
+            !toolActiveRef.current &&
+            !pendingToolCallRef.current &&
+            !playbackSourcesRef.current.size
+          ) {
+            setState((current) => (current.includes('error') ? current : 'listening'))
+          }
         } else if (message.type === 'error') {
+          dispatchProducts({ type: 'connection-lost' })
           setState('error')
         }
       })
 
       socket.addEventListener('close', () => {
-        if (socketRef.current === socket && runningRef.current) setState('error')
+        if (socketRef.current === socket && runningRef.current) {
+          shutdown(false)
+          dispatchProducts({ type: 'connection-lost' })
+          setState('error')
+        }
       })
       socket.addEventListener('error', () => {
-        if (socketRef.current === socket && runningRef.current) setState('error')
+        if (socketRef.current === socket && runningRef.current) {
+          shutdown(false)
+          dispatchProducts({ type: 'connection-lost' })
+          setState('error')
+        }
       })
 
       processor.addEventListener('audioprocess', (event) => {
@@ -438,6 +431,7 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
       })
     } catch {
       shutdown(false)
+      dispatchProducts({ type: 'connection-lost' })
       if (mountedRef.current) setState('error')
     }
   }
@@ -465,7 +459,6 @@ export function VoiceOrb({ conversationId, onConversationUpdated }: VoiceOrbProp
       onStart={() => void start()}
       onToggleMute={toggleMute}
       productDisplay={productDisplay}
-      analyses={analyses}
       savedUrls={savedUrls}
     />
   )

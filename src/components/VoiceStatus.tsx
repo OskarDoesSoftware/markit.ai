@@ -10,6 +10,7 @@ export type OrbState =
   | 'speaking'
   | 'search-error'
   | 'validation-error'
+  | 'display-error'
   | 'error'
 
 const STATUS_LABELS: Record<OrbState, string> = {
@@ -22,6 +23,7 @@ const STATUS_LABELS: Record<OrbState, string> = {
   speaking: 'Speaking',
   'search-error': 'Search unavailable',
   'validation-error': 'Validation unavailable',
+  'display-error': 'Display update unavailable',
   error: 'Connection unavailable',
 }
 

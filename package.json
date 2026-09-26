@@ -18,7 +18,8 @@
     "test:presentation": "playwright test --config presentation/playwright.config.ts",
     "images:presentation": "bun presentation/scripts/generate-artwork.ts",
     "images:branding": "bun scripts/generate-branding.ts",
-    "test:app": "playwright test --config tests/browser/playwright.config.ts"
+    "test:app": "playwright test --config tests/browser/playwright.config.ts",
+    "test:product-panel": "bun test tests/unit/product-tool-controller.test.ts"
   },
   "dependencies": {
     "@gravity-ui/icons": "^2.20.0",

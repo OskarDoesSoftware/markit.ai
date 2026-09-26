@@ -1,3 +1,4 @@
+import type { ProductDisplayPreferences, ProductPanelStage } from './product-panel-state'
 import type {
   ProductAnalysis,
   ProductCardData,
@@ -34,6 +35,9 @@ export type PersistedProductState = {
     sort: ProductSortMode
   } | null
   analyses: Record<string, ProductAnalysis>
+  stage?: ProductPanelStage
+  selectedProductUrls?: string[]
+  displayPreferences?: ProductDisplayPreferences
 }
 
 export type LoadedConversation = {

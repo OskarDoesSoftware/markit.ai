@@ -1,9 +1,4 @@
-import type {
-  ProductAnalysis,
-  ProductCardData,
-  ProductSortMode,
-  ProductViewMode,
-} from './product-types'
+import type { ProductPanelEvent } from './product-panel-state'
 import type { SavedListing } from './saved-listing-types'
 
 export type AudioRuntime = {
@@ -21,7 +16,7 @@ export type ActiveOutput = {
   startedAt: number
 }
 
-export type RealtimeMessage = {
+export type RealtimeMessage = Omit<ProductPanelEvent, 'type'> & {
   type?: string
   status?: string
   delta?: string
@@ -29,14 +24,7 @@ export type RealtimeMessage = {
   response_id?: string
   call_id?: string
   content_index?: number
-  action?: 'show' | 'close'
-  heading?: string
-  products?: ProductCardData[]
-  view?: ProductViewMode
-  sort?: ProductSortMode
   listings?: SavedListing[]
-  url?: string
-  analysis?: ProductAnalysis
   phase?: 'waiting' | 'started' | 'completed'
   tool?: string
   response?: { id?: string }

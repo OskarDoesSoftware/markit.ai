@@ -115,6 +115,75 @@
   min-width: 0;
 }
 
+.product-panel-status {
+  display: grid;
+  justify-items: start;
+  align-content: center;
+  min-height: 14rem;
+  gap: 0.75rem;
+  padding: 1.6rem;
+  border: 1px solid var(--border);
+  border-radius: 1.6rem;
+  background: var(--surface);
+}
+.product-panel-status h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--foreground);
+}
+.product-panel-status p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.product-panel-notice {
+  margin: 0 0 0.75rem;
+  padding: 0.85rem;
+  border-radius: 0.9rem;
+  color: var(--foreground);
+  background: var(--accent-soft);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.product-voice-controls {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.75rem 0 0;
+}
+.product-voice-controls .agent-status {
+  width: fit-content;
+  min-height: 2.4rem;
+  padding: 0.45rem 0.7rem;
+}
+.product-voice-controls > div:nth-child(2) {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.product-voice-controls > div:nth-child(2) > button {
+  min-height: 2.75rem;
+}
+.product-voice-controls p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+.product-table-wrap:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -3px;
+}
+.product-table .product-analysis {
+  min-width: 9rem;
+  justify-content: flex-start;
+}
+.product-table .product-validation-sources {
+  min-width: 11rem;
+}
+.product-decision {
+  min-height: 1.35rem !important;
+}
+
 @media (min-width: 900px) and (max-width: 1199px) {
   .has-products .voice-intro h1 {
     font-size: 2rem;
@@ -147,6 +216,12 @@
 }
 
 @media (max-width: 599px) {
+  .product-drawer-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--surface);
+  }
   .product-drawer .product-card {
     grid-template-columns: minmax(0, 1fr);
     padding: 0.75rem !important;

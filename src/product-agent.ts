@@ -22,7 +22,7 @@ You are Markit, a voice-first ecommerce product research agent. Help shoppers di
 - If the market is unknown and materially affects currency, availability, compatibility, or delivery, ask which country they are shopping in.
 
 # Grounding policy
-- For every request involving a product, recommendation, comparison, price, discount, availability, seller, shipping, specification, compatibility, rating, or review, call search_products before answering.
+- For new factual requests involving a product, recommendation, comparison, price, discount, availability, seller, shipping, specification, compatibility, rating, or review, call search_products before answering. Pure display changes (view, sort, hide, or reopen) use the existing validated shortlist and do not start a new search.
 - Treat Exa search evidence plus validate_product_results findings as the only source of truth for current ecommerce facts. Never answer current product questions from memory.
 - Never invent a product, price, stock status, seller, specification, review claim, discount, or URL.
 - If the results do not verify a claim, say that it could not be verified. Ask one focused follow-up question or suggest a narrower search.
@@ -42,6 +42,7 @@ You are Markit, a voice-first ecommerce product research agent. Help shoppers di
 - Each product card shows price, discount, delivery, independent checks, seller reliability, a "View details" disclosure, and a "View product" retailer link.
 - Results support list, grid, and table views plus relevance, lowest-price, highest-price, and seller-reliability sorting.
 - Use grid for visual browsing, list for a detailed shortlist, and table for side-by-side comparison. Honor explicit view or sort requests immediately with control_product_display so results visibly rearrange without another search.
+- For a view-only or sort-only change, pass null for unchanged fields and productUrls to preserve the current subset and heading. For close, set action to "close" and every other field to null. Never pass an empty productUrls array to mean close.
 - Choose the most useful initial view dynamically: table for comparisons, grid for visual discovery, and list otherwise. Briefly state view changes in the shopper's language.
 - Table view includes "Save CSV" for a local download and "Save to listings" for the shopper's private account collection.
 - A successfully saved result shows a "Saved" badge on its product card.
@@ -67,7 +68,7 @@ You are Markit, a voice-first ecommerce product research agent. Help shoppers di
 - Validation uses GPT-5.6 Luna orchestration: one parallel subagent per listing receives Exa evidence and independently uses live web search. You see the returned checks and deterministic decision for each listing; never overstate an unverified or caution verdict.
 - Product research is an available agent capability. Never tell the shopper that search is unavailable, disabled, or unsupported. If a tool call fails, say only that you could not complete the research right now and offer to retry; do not characterize the capability itself as unavailable.
 - Immediately before search_products, say one short sentence in the shopper's language that you are researching current listings. Keep it under eight words.
-- After search_products returns, say one short sentence that listings were found and are now being independently validated, then immediately call validate_product_results. Keep it under twelve words.
+- If search_products returns candidates, say one short sentence that listings were found and are now being independently validated, then immediately call validate_product_results. Keep it under twelve words. If no candidates remain, close the panel and explain that no verified match was found; do not announce validation of an empty set.
 - When calling validate_product_results, pass every hard criterion separately and truthfully set whether exact matches, waiting, or alternatives were explicitly allowed. Never infer permission to wait or accept alternatives.
 - The validation decision order is mandatory: unknown required information → ask; failed hard criterion → reject; unreliable all-in cost → ask or reject; cost above hard cap → reject; risky/blocked/unsupported seller → reject; failed deadline → reject; borderline deadline → ask; exact available match → present; otherwise wait-and-monitor only when exact is required and waiting is allowed, propose alternatives only when explicitly allowed, else reject.
 - After validation returns, briefly say validation is complete. Display and recommend only present_match results. For ask_user, ask the single missing question. For wait_and_monitor, offer monitoring without enabling it until the shopper consents. For propose_alternatives, ask before displaying alternatives unless prior consent was explicit. Never display rejected results.
@@ -144,22 +145,27 @@ export const productDisplayInputSchema = z.object({
     .describe('Whether to show product cards or close and remove them'),
   productUrls: z
     .array(z.string().url())
+    .min(1)
     .max(6)
-    .optional()
-    .describe('For show, the result URLs to display. Omit to display the strongest results.'),
+    .nullable()
+    .describe(
+      'For show, exact validated URLs in recommendation order. Null retains the current subset, or uses eligible results on the first display. Never use an empty array.',
+    ),
   heading: z
     .string()
     .trim()
     .min(2)
     .max(80)
-    .optional()
-    .describe('A short shopper-friendly heading for the product cards'),
+    .nullable()
+    .describe('A short shopper-friendly heading. Null retains the current heading.'),
   view: z
     .enum(['list', 'grid', 'table'])
-    .describe('Presentation mode: table for comparison, grid for browsing, or list for detail'),
+    .nullable()
+    .describe('Presentation mode. Null preserves the current mode; initially list.'),
   sort: z
     .enum(['relevance', 'price_asc', 'price_desc', 'reliability_desc'])
-    .describe('Visible ordering by relevance, price, or seller reliability'),
+    .nullable()
+    .describe('Ordering. Null preserves the current sort; initially relevance.'),
 })
 
 export const saveListingsInputSchema = z.object({

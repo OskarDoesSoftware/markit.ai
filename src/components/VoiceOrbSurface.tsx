@@ -2,12 +2,7 @@ import { Button } from '@heroui/react'
 import { arc, motion, useReducedMotion, type MotionValue } from 'motion/react'
 import { useMemo } from 'react'
 
-import type {
-  ProductAnalysis,
-  ProductCardData,
-  ProductSortMode,
-  ProductViewMode,
-} from '@/product-types'
+import type { ProductPanelState } from '@/product-panel-state'
 
 import { MicrophoneMuteButton } from './MicrophoneMuteButton'
 import { ProductResults } from './ProductResults'
@@ -23,14 +18,7 @@ type VoiceOrbSurfaceProps = {
   isMuted: boolean
   onStart: () => void
   onToggleMute: () => void
-  productDisplay: {
-    isOpen: boolean
-    heading: string
-    products: ProductCardData[]
-    view: ProductViewMode
-    sort: ProductSortMode
-  }
-  analyses: Record<string, ProductAnalysis>
+  productDisplay: ProductPanelState
   savedUrls: ReadonlySet<string>
 }
 
@@ -41,7 +29,6 @@ export function VoiceOrbSurface({
   onStart,
   onToggleMute,
   productDisplay,
-  analyses,
   savedUrls,
 }: VoiceOrbSurfaceProps) {
   const reduced = useReducedMotion()
@@ -105,13 +92,9 @@ export function VoiceOrbSurface({
         </motion.p>
       </motion.section>
       <ProductResults
-        isOpen={productDisplay.isOpen}
-        heading={productDisplay.heading}
-        products={productDisplay.products}
-        analyses={analyses}
+        panel={productDisplay}
         savedUrls={savedUrls}
-        view={productDisplay.view}
-        sort={productDisplay.sort}
+        voice={{ state, isMuted, onStart, onToggleMute }}
       />
     </div>
   )

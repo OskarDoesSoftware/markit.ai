@@ -204,6 +204,9 @@ export async function saveConversationProductState(
     latestValidationContext: state.latestValidationContext,
     display: state.display,
     analyses: state.analyses,
+    stage: state.stage,
+    selectedProductUrls: state.selectedProductUrls,
+    displayPreferences: state.displayPreferences,
   } satisfies PersistedProductState)
   if (serialized.length > 300_000) return
   await database

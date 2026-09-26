@@ -454,6 +454,7 @@ button {
 
 .agent-status[data-state='search-error'],
 .agent-status[data-state='validation-error'],
+.agent-status[data-state='display-error'],
 .agent-status[data-state='error'] {
   color: var(--danger);
 }
@@ -474,7 +475,8 @@ button {
 
 .product-panel-heading {
   display: flex;
-  align-items: end;
+  flex-wrap: wrap;
+  align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
   padding: 0.25rem 0.25rem 1.35rem;
@@ -501,7 +503,7 @@ button {
 .product-panel-heading small {
   color: var(--text-muted);
   font-size: 0.7rem;
-  white-space: nowrap;
+  text-wrap: balance;
 }
 
 .product-card-list {

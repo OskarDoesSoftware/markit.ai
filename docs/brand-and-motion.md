@@ -12,6 +12,8 @@
 - `use-is-mobile.ts` is the shared **below 900px** breakpoint. Mobile navigation
   exposes existing sessions and the explicit New thread action; opening it does
   not create a conversation. Product results remain model-controlled.
+  The [product-panel state reference](product-panel.md) owns stage and
+  model-control semantics; this guide owns only their visual/motion behavior.
 
 ## What moves, and why?
 
