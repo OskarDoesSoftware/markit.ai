@@ -71,6 +71,12 @@ Use `bun oxlint --type-aware` as the source of truth for linting and type analys
 
 ## Deployment
 
+The standalone presentation/demo deck lives in `presentation/`, separately from
+the application. Start with [its README](presentation/README.md) for the visual
+system, Pi-subscription artwork generation, and focused browser checks. Its
+demo-only credential belongs exclusively in ignored root `e.nv`; do not load it
+into the app, generated artwork, or production deployment.
+
 The Worker is named `markit-ai` and configured in `wrangler.toml`. `bun run build` emits `dist/server/wrangler.json`; deploy that generated configuration with Wrangler.
 
 `.github/workflows/deploy.yml` is the production CI/CD pipeline. Pull requests to `main` run the verification gate. Pushes to `main` and manual dispatches run the same gate, deploy the already-built application output, and deploy the standalone `markit-ai-presentation` Worker from `presentation/wrangler.toml`. The workflow uses the latest Bun canary, a frozen lockfile, Bun's package cache, least-privilege GitHub permissions, and concurrency cancellation for superseded runs.

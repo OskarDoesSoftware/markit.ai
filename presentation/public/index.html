@@ -3,49 +3,67 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#e7e4de" />
+    <meta name="theme-color" content="#faf7f2" />
     <meta
       name="description"
       content="Markit.ai: a voice-first product research assistant. Project presentation."
     />
     <title>Markit.ai | Project Presentation</title>
     <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/slides.css" />
+    <link rel="stylesheet" href="/responsive.css" />
     <script src="/deck.js" defer></script>
   </head>
   <body>
+    <a class="skip-link" href="#slides">Skip to presentation</a>
     <div class="deck-shell">
       <div class="deck-toolbar" aria-label="Presentation controls">
         <a class="wordmark" href="#1" aria-label="Markit.ai, first slide">
           <img class="wordmark-mark" src="/logo.svg" alt="" />
           <span>markit.ai</span>
         </a>
-        <button class="icon-button" id="fullscreen" type="button" aria-label="Enter fullscreen">
-          <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" />
-          </svg>
-          <svg class="collapse-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" />
-          </svg>
-        </button>
+        <div class="toolbar-actions">
+          <a class="text-link" href="#13">Try the demo <span aria-hidden="true">↗</span></a>
+          <button class="icon-button" id="fullscreen" type="button" aria-label="Enter fullscreen">
+            <svg class="expand-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" />
+            </svg>
+            <svg class="collapse-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      <main class="slides" id="slides">
+      <main class="slides" id="slides" tabindex="-1" aria-label="Markit.ai presentation">
         <section class="slide slide-cover" aria-labelledby="slide-1-title" data-chapter="Meet Jan">
           <div class="cover-copy reveal">
-            <p class="eyebrow">Meet Jan</p>
+            <p class="eyebrow"><span class="eyebrow-dot"></span> A more human way to shop</p>
             <h1 id="slide-1-title">Good coffee.<br /><span>Fair price.</span></h1>
             <p class="lede">
               Jan wants a bag of specialty coffee for under €25. He has limited vision, so dense
               product grids and tiny filters turn a simple purchase into a chore.
             </p>
+            <a class="button button-primary" href="#2"
+              >Meet Jan's new shopping assistant <span aria-hidden="true">→</span></a
+            >
           </div>
           <div class="hero-visual reveal reveal-late">
-            <div class="coffee-beans" aria-hidden="true">
-              <span></span>
-              <span></span>
-              <span></span>
+            <span class="visual-kicker">Meet Jan</span>
+            <img
+              class="jan-portrait"
+              src="/art/jan-960.webp"
+              srcset="/art/jan-480.webp 480w, /art/jan-960.webp 960w"
+              sizes="(max-width: 899px) 85vw, 42vw"
+              width="960"
+              height="1440"
+              fetchpriority="high"
+              alt="Jan holding his phone near his mouth to shop by voice"
+            />
+            <div class="voice-caption">
+              <span class="mini-wave" aria-hidden="true">ııııı</span
+              ><span>“Good coffee. Under €25.”<small>His words. His budget.</small></span>
             </div>
-            <img class="jan-portrait" src="/jan-cutout.png" alt="Jan using voice search" />
           </div>
           <div class="cover-foot reveal reveal-later">
             <span>One clear need</span>
@@ -119,13 +137,13 @@
               <div class="journey-icon compare-glyph" aria-hidden="true"><i></i><i></i><i></i></div>
               <h3>Checked before claimed</h3>
               <p>
-                An independent audit reviews each listing before Markit vouches for it out loud.
+                A separate validation agent reviews each listing. Missing evidence stays visible.
               </p>
             </article>
           </div>
           <div class="engineering-note reveal reveal-later">
             <span>The solution</span>
-            <p>Markit.ai — a realtime voice agent that turns one sentence into verified choices.</p>
+            <p>One spoken need. Live research. Evidence you can inspect.</p>
           </div>
         </section>
 
@@ -146,11 +164,18 @@
               <span>Under €25</span><i></i><span>Whole bean</span><i></i><span>Low acidity</span>
             </div>
           </div>
-          <div class="orb-stage reveal reveal-late" aria-hidden="true">
-            <div class="orb-echo echo-one"></div>
-            <div class="orb-echo echo-two"></div>
-            <div class="orb orb-xlarge"><span></span></div>
-            <div class="status-pill"><b></b>Listening to Jan</div>
+          <div class="orb-stage reveal reveal-late">
+            <img
+              class="orb-art"
+              src="/art/voice-orbit.webp"
+              srcset="/art/voice-orbit-640.webp 640w, /art/voice-orbit.webp 1024w"
+              sizes="(max-width: 899px) 85vw, 42vw"
+              width="1024"
+              height="1024"
+              alt=""
+              loading="lazy"
+            />
+            <div class="status-pill"><b></b>One conversation, less searching</div>
           </div>
         </section>
 
@@ -176,8 +201,8 @@
             <li>
               <span class="journey-number">02</span>
               <div class="journey-icon search-glyph" aria-hidden="true"></div>
-              <h3>Clarify</h3>
-              <p>It asks Jan whether he prefers a light or medium roast.</p>
+              <h3>Clarify, if needed</h3>
+              <p>At most one important missing detail. If Jan says go ahead, it searches.</p>
             </li>
             <li>
               <span class="journey-number">03</span>
@@ -188,8 +213,8 @@
             <li>
               <span class="journey-number">04</span>
               <div class="journey-icon response-glyph" aria-hidden="true"></div>
-              <h3>Answer</h3>
-              <p>Jan hears a short list and why each coffee may suit him.</p>
+              <h3>Check, then answer</h3>
+              <p>Listings are validated before Jan hears which options meet his needs.</p>
             </li>
           </ol>
           <p class="bottom-note reveal reveal-later">
@@ -285,7 +310,7 @@
         >
           <div class="slide-heading compact-heading reveal">
             <p class="eyebrow">07 · Every listing gets checked</p>
-            <h2 id="slide-7-title">One product.<br /><span>One independent audit.</span></h2>
+            <h2 id="slide-7-title">One product.<br /><span>A dedicated second look.</span></h2>
           </div>
           <div class="engineering-grid reveal reveal-late">
             <article>
@@ -310,7 +335,7 @@
           </div>
           <div class="engineering-note reveal reveal-later">
             <span>While Jan listens</span>
-            <p>Checks stream onto each card without holding up the voice reply.</p>
+            <p>Validate before recommending. Seller evidence is not a guarantee.</p>
           </div>
         </section>
 
@@ -321,24 +346,40 @@
               A shortlist he can hear.<br /><span>Evidence he can inspect.</span>
             </h2>
           </div>
-          <div class="progress-board reveal reveal-late">
-            <div class="progress-column shipped">
-              <p class="column-label"><i></i>What Jan asked for</p>
-              <ul>
-                <li>Maximum price of €25</li>
-                <li>Whole coffee beans</li>
-                <li>Smooth, low-acidity taste</li>
-                <li>Useful seller evidence</li>
-              </ul>
-            </div>
-            <div class="progress-column learning">
-              <p class="column-label"><i></i>What Markit returns</p>
-              <ul>
-                <li>A current matching price</li>
-                <li>A short reason for the match</li>
-                <li>Visible audit results</li>
-                <li>A direct link to the offer</li>
-              </ul>
+          <div class="shortlist-layout reveal reveal-late">
+            <figure class="coffee-preview">
+              <img
+                src="/art/coffee-ritual.webp"
+                srcset="/art/coffee-ritual-640.webp 640w, /art/coffee-ritual.webp 1024w"
+                sizes="(max-width: 899px) 85vw, 32vw"
+                width="1024"
+                height="1024"
+                alt="Illustrated coffee ritual with a cup, whole beans and an unbranded lavender pouch"
+                loading="lazy"
+              />
+              <figcaption>
+                Jan's coffee brief <span>Concept artwork · not a live offer</span>
+              </figcaption>
+            </figure>
+            <div class="progress-board">
+              <div class="progress-column shipped">
+                <p class="column-label"><i></i>What Jan asked for</p>
+                <ul>
+                  <li>Maximum price of €25</li>
+                  <li>Whole coffee beans</li>
+                  <li>Smooth, low-acidity taste</li>
+                  <li>Useful seller evidence</li>
+                </ul>
+              </div>
+              <div class="progress-column learning">
+                <p class="column-label"><i></i>What Markit returns</p>
+                <ul>
+                  <li>A current matching price</li>
+                  <li>A short reason for the match</li>
+                  <li>Visible audit results</li>
+                  <li>A direct link to the offer</li>
+                </ul>
+              </div>
             </div>
           </div>
           <p class="bottom-note reveal reveal-later">
@@ -389,7 +430,7 @@
           hidden
         >
           <div class="finale-orb reveal" aria-hidden="true">
-            <div class="orb orb-medium"><span></span></div>
+            <img src="/art/coffee-ritual-640.webp" width="640" height="640" alt="" loading="lazy" />
           </div>
           <div class="finale-copy reveal reveal-late">
             <p class="eyebrow">Markit.ai</p>
@@ -413,7 +454,14 @@
           </div>
           <div class="team-grid reveal reveal-late">
             <article class="team-card">
-              <img class="team-photo" src="/team-oskar.png" alt="Portrait of Oskar Kalbarczyk" />
+              <img
+                class="team-photo"
+                src="/art/team-oskar.webp"
+                width="400"
+                height="400"
+                loading="lazy"
+                alt="Portrait of Oskar Kalbarczyk"
+              />
               <h3>Oskar Kalbarczyk</h3>
               <p class="team-handle">@oskalbarczyk</p>
               <img
@@ -421,10 +469,24 @@
                 src="/qr-oskar.svg"
                 alt="QR code for Oskar Kalbarczyk's LinkedIn profile"
               />
-              <span class="team-link">LinkedIn</span>
+              <a
+                class="team-link"
+                href="https://www.linkedin.com/in/oskalbarczyk/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Oskar Kalbarczyk on LinkedIn (opens a new tab)"
+                >LinkedIn ↗</a
+              >
             </article>
             <article class="team-card">
-              <img class="team-photo" src="/team-denys.png" alt="Portrait of Denys Storozhuk" />
+              <img
+                class="team-photo"
+                src="/art/team-denys.webp"
+                width="385"
+                height="400"
+                loading="lazy"
+                alt="Portrait of Denys Storozhuk"
+              />
               <h3>Denys Storozhuk</h3>
               <p class="team-handle">@denys-storozhuk13</p>
               <img
@@ -432,10 +494,24 @@
                 src="/qr-denys.svg"
                 alt="QR code for Denys Storozhuk's LinkedIn profile"
               />
-              <span class="team-link">LinkedIn</span>
+              <a
+                class="team-link"
+                href="https://www.linkedin.com/in/denys-storozhuk13/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Denys Storozhuk on LinkedIn (opens a new tab)"
+                >LinkedIn ↗</a
+              >
             </article>
             <article class="team-card">
-              <img class="team-photo" src="/team-dalist.png" alt="Portrait of Andrei Shumko" />
+              <img
+                class="team-photo"
+                src="/art/team-dalist.webp"
+                width="400"
+                height="400"
+                loading="lazy"
+                alt="Portrait of Andrei Shumko"
+              />
               <h3>Andrei Shumko</h3>
               <p class="team-handle">@andrei-shumko</p>
               <img
@@ -443,10 +519,24 @@
                 src="/qr-dalist.svg"
                 alt="QR code for Andrei Shumko's LinkedIn profile"
               />
-              <span class="team-link">LinkedIn</span>
+              <a
+                class="team-link"
+                href="https://www.linkedin.com/in/andrei-shumko/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Andrei Shumko on LinkedIn (opens a new tab)"
+                >LinkedIn ↗</a
+              >
             </article>
             <article class="team-card">
-              <img class="team-photo" src="/team-frensi.png" alt="Portrait of Frensi Qatipi" />
+              <img
+                class="team-photo"
+                src="/art/team-frensi.webp"
+                width="400"
+                height="400"
+                loading="lazy"
+                alt="Portrait of Frensi Qatipi"
+              />
               <h3>Frensi Qatipi</h3>
               <p class="team-handle">@frensiqatipi</p>
               <img
@@ -454,7 +544,14 @@
                 src="/qr-frensi.svg"
                 alt="QR code for Frensi Qatipi's LinkedIn profile"
               />
-              <span class="team-link">LinkedIn</span>
+              <a
+                class="team-link"
+                href="https://www.linkedin.com/in/frensiqatipi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Frensi Qatipi on LinkedIn (opens a new tab)"
+                >LinkedIn ↗</a
+              >
             </article>
           </div>
         </section>
@@ -465,24 +562,70 @@
           data-chapter="Live demo"
           hidden
         >
-          <div class="slide-heading compact-heading reveal">
-            <p class="eyebrow">Live demo</p>
-            <h2 id="slide-demo-title">Try it<br /><span>yourself.</span></h2>
+          <div class="demo-copy reveal">
+            <p class="eyebrow"><span class="eyebrow-dot"></span> Your turn</p>
+            <h2 id="slide-demo-title">Less browsing.<br /><span>More finding.</span></h2>
+            <p class="lede">
+              Tell Markit what you need. Let the research start with a conversation.
+            </p>
+            <a
+              class="button button-primary"
+              href="https://markit-ai.dalist.workers.dev/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open the live Markit.ai demo (opens a new tab)"
+              >Open the live demo <span aria-hidden="true">↗</span></a
+            >
+            <p class="demo-hint">Sign in, allow your microphone, and say hello.</p>
+            <blockquote class="sample-prompt">
+              <span>Not sure where to start?</span>“Find me smooth whole-bean coffee under €25.”
+            </blockquote>
           </div>
           <div class="demo-cta reveal reveal-late">
+            <span class="qr-label">Take Markit with you</span>
             <img
               class="demo-qr"
               src="/qr-demo.svg"
               alt="QR code linking to the Markit.ai live demo"
+              width="256"
+              height="256"
             />
+            <p>Scan to open on your phone</p>
+            <span class="demo-domain">markit-ai.dalist.workers.dev</span>
           </div>
         </section>
       </main>
 
-      <p class="slide-count" aria-label="Slide count">
-        <b id="current-slide">01</b>/<span id="total-slides">12</span>
-      </p>
+      <footer class="deck-footer">
+        <div class="chapter-info">
+          <span class="chapter-label">The Markit story</span><span id="chapter-name">Meet Jan</span>
+        </div>
+        <nav class="slide-navigation" aria-label="Slide navigation">
+          <button class="nav-button" id="previous-slide" type="button" aria-label="Previous slide">
+            <span aria-hidden="true">←</span><span class="nav-label">Back</span>
+          </button>
+          <p class="slide-count" aria-label="Slide count">
+            <b id="current-slide">01</b><span aria-hidden="true"> / </span
+            ><span id="total-slides">13</span>
+          </p>
+          <button class="nav-button" id="next-slide" type="button" aria-label="Next slide">
+            <span class="nav-label">Next</span><span aria-hidden="true">→</span>
+          </button>
+        </nav>
+        <progress
+          id="deck-progress"
+          max="13"
+          value="1"
+          aria-label="Presentation progress"
+        ></progress>
+      </footer>
       <p class="sr-only" id="slide-announcement" aria-live="polite"></p>
     </div>
+    <noscript
+      ><p class="noscript-note">
+        Enable JavaScript to navigate the deck, or
+        <a href="https://markit-ai.dalist.workers.dev/">open Markit.ai directly</a>.
+      </p></noscript
+    >
   </body>
 </html>

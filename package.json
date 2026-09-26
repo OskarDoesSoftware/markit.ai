@@ -14,7 +14,9 @@
     "fmt:check": "oxfmt --check .",
     "verify": "bun run fmt:check && bun run lint:type-aware && bun run build",
     "deploy": "bun run verify && wrangler deploy -c dist/server/wrangler.json",
-    "deploy:presentation": "wrangler deploy -c presentation/wrangler.toml"
+    "deploy:presentation": "wrangler deploy -c presentation/wrangler.toml",
+    "test:presentation": "playwright test --config presentation/playwright.config.ts",
+    "images:presentation": "bun presentation/scripts/generate-artwork.ts"
   },
   "dependencies": {
     "@gravity-ui/icons": "^2.20.0",
@@ -32,6 +34,7 @@
     "@babel/core": "^8.0.1",
     "@cloudflare/vite-plugin": "^1.43.2",
     "@cloudflare/workers-types": "^5.20260711.1",
+    "@playwright/test": "^1.63.0",
     "@rolldown/plugin-babel": "^0.2.3",
     "@tailwindcss/vite": "^4.3.2",
     "@tanstack/router-plugin": "^1.168.19",
@@ -42,6 +45,7 @@
     "oxfmt": "^0.56.0",
     "oxlint": "^1.73.0",
     "oxlint-tsgolint": "^0.23.0",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4.3.2",
     "typescript": "^6.0.3",
     "vite": "^8.1.3",

@@ -1,0 +1,19 @@
+{
+  "generatedAt": "2026-09-26T07:41:08.905Z",
+  "authentication": "Pi OpenAI Codex subscription; no API key",
+  "chatModel": "gpt-5.6-sol",
+  "imageModel": "gpt-2.5-sunburst",
+  "prompt": "An inviting coffee ritual: a sculptural ivory ceramic cup of coffee, one unbranded pale lavender whole-bean coffee pouch and a small scattering of coffee beans on a softly curved peach plinth. Pale mint backdrop with lavender ambient light. Three-quarter editorial view. This is conceptual artwork for Jan, who wants smooth whole-bean coffee under €25, not a real listing.\n\nPremium editorial still life for Markit.ai, a voice-first shopping research assistant. Soft lavender #dcd4ff, warm peach #ffd9c9, pale mint #cff3df and warm ivory #faf7f2. Beautiful tactile matte ceramic and frosted glass, quiet natural lighting, soft shadows, subtle sunburst diffusion, generous negative space, contemporary art direction. No text, letters, logos, numbers, price tags, watermarks, people or screenshots. Not neon, not oversaturated. Keep all subjects inside the central 75 percent of a square frame.",
+  "files": [
+    {
+      "name": "coffee-ritual-640.webp",
+      "width": 640,
+      "sha256": "7d51e2b1950fd5fb30ed520391b8a18f913eb1d5c931e581934bc1cf79ee050a"
+    },
+    {
+      "name": "coffee-ritual.webp",
+      "width": 1024,
+      "sha256": "df05dfd7897d0326091a1acc0ca5385325bcb79df687fec537edc16ca668c801"
+    }
+  ]
+}

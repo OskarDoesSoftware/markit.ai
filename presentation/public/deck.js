@@ -4,13 +4,19 @@ const currentLabel = document.querySelector('#current-slide')
 const totalLabel = document.querySelector('#total-slides')
 const announcement = document.querySelector('#slide-announcement')
 const deckShell = document.querySelector('.deck-shell')
+const slideViewport = document.querySelector('#slides')
+const previousButton = document.querySelector('#previous-slide')
+const nextButton = document.querySelector('#next-slide')
+const chapterLabel = document.querySelector('#chapter-name')
+const progress = document.querySelector('#deck-progress')
 
 let currentIndex = 0
 let touchStartX = null
 let touchStartY = null
 
 function indexFromHash() {
-  const parsed = Number.parseInt(window.location.hash.slice(1), 10)
+  const value = window.location.hash.slice(1)
+  const parsed = /^\d+$/.test(value) ? Number(value) : 1
   return Number.isFinite(parsed) ? Math.max(0, Math.min(slides.length - 1, parsed - 1)) : 0
 }
 
@@ -20,6 +26,7 @@ function formatSlideNumber(value) {
 
 function renderSlide(nextIndex, options = {}) {
   const boundedIndex = Math.max(0, Math.min(slides.length - 1, nextIndex))
+  const focusWasInSlide = slideViewport.contains(document.activeElement)
   currentIndex = boundedIndex
 
   slides.forEach((slide, index) => {
@@ -29,7 +36,10 @@ function renderSlide(nextIndex, options = {}) {
     slide.inert = !isActive
     slide.setAttribute('aria-hidden', String(!isActive))
 
-    if (isActive) requestAnimationFrame(() => slide.classList.add('is-active'))
+    if (isActive)
+      requestAnimationFrame(() => {
+        if (!slide.hidden) slide.classList.add('is-active')
+      })
   })
 
   const activeSlide = slides[currentIndex]
@@ -38,7 +48,19 @@ function renderSlide(nextIndex, options = {}) {
 
   currentLabel.textContent = formatSlideNumber(currentIndex + 1)
   totalLabel.textContent = formatSlideNumber(slides.length)
+  previousButton.disabled = currentIndex === 0
+  nextButton.disabled = currentIndex === slides.length - 1
+  chapterLabel.textContent = activeSlide.dataset.chapter
+  progress.max = slides.length
+  progress.value = currentIndex + 1
+  slideViewport.scrollTop = 0
   document.title = `${title} | Markit.ai`
+
+  if (focusWasInSlide && options.announce !== false) {
+    const heading = activeSlide.querySelector('h1, h2')
+    heading.tabIndex = -1
+    heading.focus({ preventScroll: true })
+  }
 
   const hash = `#${currentIndex + 1}`
   if (window.location.hash !== hash) history.replaceState(null, '', hash)
@@ -54,12 +76,31 @@ function goPrevious() {
   if (currentIndex > 0) renderSlide(currentIndex - 1)
 }
 
-window.addEventListener('keydown', (event) => {
-  if (event.altKey || event.ctrlKey || event.metaKey) return
+previousButton.addEventListener('click', goPrevious)
+nextButton.addEventListener('click', goNext)
 
-  const target = event.target
-  if (target instanceof HTMLElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName))
+function isInteractive(target) {
+  return (
+    target instanceof Element &&
+    Boolean(
+      target.closest(
+        'a, button, input, textarea, select, [contenteditable]:not([contenteditable="false"])',
+      ),
+    )
+  )
+}
+
+window.addEventListener('keydown', (event) => {
+  if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+
+  if (
+    event.target instanceof Element &&
+    event.target.closest(
+      'input, textarea, select, [contenteditable]:not([contenteditable="false"])',
+    )
+  )
     return
+  if ([' ', 'Enter'].includes(event.key) && isInteractive(event.target)) return
 
   if (['ArrowRight', 'PageDown', ' '].includes(event.key)) {
     event.preventDefault()
@@ -76,11 +117,16 @@ window.addEventListener('keydown', (event) => {
   }
 })
 
-window.addEventListener('hashchange', () => renderSlide(indexFromHash()))
+window.addEventListener('hashchange', () => {
+  if (window.location.hash !== '#slides') renderSlide(indexFromHash())
+})
 
-deckShell.addEventListener(
+slideViewport.addEventListener(
   'touchstart',
   (event) => {
+    touchStartX = null
+    touchStartY = null
+    if (event.touches.length !== 1 || isInteractive(event.target)) return
     const touch = event.changedTouches[0]
     touchStartX = touch?.clientX ?? null
     touchStartY = touch?.clientY ?? null
@@ -88,7 +134,7 @@ deckShell.addEventListener(
   { passive: true },
 )
 
-deckShell.addEventListener(
+slideViewport.addEventListener(
   'touchend',
   (event) => {
     if (touchStartX === null || touchStartY === null) return
@@ -104,6 +150,11 @@ deckShell.addEventListener(
   },
   { passive: true },
 )
+
+slideViewport.addEventListener('touchcancel', () => {
+  touchStartX = null
+  touchStartY = null
+})
 
 function updateFullscreenLabel() {
   const isFullscreen = Boolean(document.fullscreenElement)

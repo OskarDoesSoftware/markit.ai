@@ -5,6 +5,7 @@ dist/
 .wrangler/
 .dev.vars
 .env
+e.nv
 .env.*
 !.env.example
 *.log
