@@ -71,7 +71,6 @@ export function VoiceOrbSurface({
             className="voice-orb"
             data-state={state}
             aria-label={label}
-            title={label}
             onPress={onStart}
           >
             <VoiceOrbArt state={state} level={level} />

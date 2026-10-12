@@ -19,7 +19,6 @@ export function MicrophoneMuteButton({
       data-muted={isMuted}
       aria-label={label}
       aria-pressed={isMuted}
-      title={label}
       onPress={onToggle}
     >
       {isMuted ? <MicrophoneSlash aria-hidden="true" /> : <Microphone aria-hidden="true" />}

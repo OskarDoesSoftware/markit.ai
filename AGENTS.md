@@ -38,9 +38,9 @@ Run commands from the repository root.
 
 ## Required gate
 
-`bun run verify` must pass before a commit or deployment. It runs formatting, type-aware linting, and the production build.
+`bun run verify` must pass before a commit or deployment. It runs formatting, native type checking, type-aware linting, and the production build.
 
-Use native `bun check` (`bun run typecheck`) for type checking, never `tsc` or `tsc --noEmit`. It is not yet part of `verify`: the tree has 50 pre-existing type errors, and the gate would block every deploy until they are fixed. Lint with native `bun lint` and format with native `bun format`; they read `.oxlintrc.json` and `.oxfmtrc.json` and need a Bun canary that ships them, which CI installs. Keep the package script names `check`, `lint` and `format` free so they cannot shadow the native commands.
+Use native `bun check` (`bun run typecheck`) for type checking, never `tsc` or `tsc --noEmit`. Lint with native `bun lint` and format with native `bun format`; they read `.oxlintrc.json` and `.oxfmtrc.json` and need a Bun canary that ships them, which CI installs. Keep the package script names `check`, `lint` and `format` free so they cannot shadow the native commands.
 
 ## Conventions
 
