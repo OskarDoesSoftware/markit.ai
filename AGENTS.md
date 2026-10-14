@@ -13,7 +13,7 @@ Guidance for AI agents working in this repository. This file is the single sourc
 - HeroUI v3 for accessible UI primitives
 - Tailwind CSS v4
 - TypeScript in strict mode
-- Native `bun format` and type-aware `bun lint`
+- Native `bun fmt` and type-aware `bun lint`
 - Cloudflare Workers via `@cloudflare/vite-plugin` and Wrangler
 - AI SDK v7 for typed realtime tool definitions
 - Exa for live ecommerce product retrieval
@@ -31,7 +31,7 @@ Run commands from the repository root.
 | Build                | `bun run build`                                   |
 | Type check           | `bun check` (or `bun run typecheck`)              |
 | Type-aware lint      | `bun run lint:type-aware`                         |
-| Format               | `bun run fmt`                                     |
+| Format               | `bun run fmt:write`                               |
 | Full verification    | `bun run verify`                                  |
 | Deploy manually      | `bun run deploy`                                  |
 | Reproduce CI locally | `bun install --frozen-lockfile && bun run verify` |
@@ -40,7 +40,7 @@ Run commands from the repository root.
 
 `bun run verify` must pass before a commit or deployment. It runs formatting, native type checking, type-aware linting, and the production build.
 
-Use native `bun check` (`bun run typecheck`) for type checking, never `tsc` or `tsc --noEmit`. Lint with native `bun lint` and format with native `bun format`; they read `.oxlintrc.json` and `.oxfmtrc.json` and need a Bun canary that ships them, which CI installs. Keep the package script names `check`, `lint` and `format` free so they cannot shadow the native commands.
+Use native `bun check` (`bun run typecheck`) for type checking, never `tsc` or `tsc --noEmit`. Lint with native `bun lint` and format with native `bun fmt` (named `bun format` in Bun canaries before 2026-10-13); they read `.oxlintrc.json` and `.oxfmtrc.json` and need a Bun canary that ships them, which CI installs. Keep the package script names `check`, `lint`, `fmt` and `format` free so they cannot shadow the native commands.
 
 ## Conventions
 
