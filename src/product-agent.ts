@@ -386,7 +386,9 @@ export async function searchProducts(
 ): Promise<{
   query: string
   searchedAt: string
+  budget?: { minPrice?: number; maxPrice?: number; currency?: string }
   products: ProductCardData[]
+  message?: string
 }> {
   const parsed = productSearchInputSchema.parse(input)
   const countryMarket = resolveCountryMarket(parsed.country)

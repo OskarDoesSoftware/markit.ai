@@ -119,7 +119,6 @@ export function MainSidebar({
             variant="ghost"
             className="sidebar-new-session"
             aria-label="Reset and start a new thread"
-            title="New thread"
             onPress={() => {
               setMenuOpen(false)
               onNewConversation()

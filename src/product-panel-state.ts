@@ -55,6 +55,8 @@ export type ProductPanelEvent = {
   restored?: boolean
 }
 
+type ProductPanelConnectionEvent = { type: 'connection-reset' } | { type: 'connection-lost' }
+
 export function initialProductPanel(): ProductPanelState {
   return {
     ...DEFAULT_PRODUCT_DISPLAY,
@@ -74,7 +76,7 @@ export function isResearchPending(stage: ProductPanelStage) {
 
 export function reduceProductPanel(
   state: ProductPanelState,
-  event: ProductPanelEvent | { type: 'connection-reset' | 'connection-lost' },
+  event: ProductPanelEvent | ProductPanelConnectionEvent,
 ): ProductPanelState {
   if (event.type === 'connection-reset') return { ...state, revision: -1, researchId: -1 }
   if (event.type === 'connection-lost') {

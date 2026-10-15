@@ -10,8 +10,9 @@ import {
   Spinner,
   Table,
   TextField,
+  type SortDescriptor,
 } from '@heroui/react'
-import { useEffect, useMemo, useState, type Key } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { downloadCsv } from '@/csv'
 import type { SavedListing } from '@/saved-listing-types'
@@ -20,10 +21,6 @@ import './SavedListings.css'
 
 type ListingStatus = 'loading' | 'ready' | 'error'
 type PriceFilter = 'all' | 'priced' | 'unpriced'
-type ListingSort = {
-  column: Key
-  direction: 'ascending' | 'descending'
-}
 
 function compareText(left: string, right: string): number {
   return left.localeCompare(right, undefined, { numeric: true, sensitivity: 'base' })
@@ -43,7 +40,7 @@ export function SavedListings() {
   const [query, setQuery] = useState('')
   const [source, setSource] = useState('all')
   const [priceFilter, setPriceFilter] = useState<PriceFilter>('all')
-  const [sort, setSort] = useState<ListingSort>({ column: 'savedAt', direction: 'descending' })
+  const [sort, setSort] = useState<SortDescriptor>({ column: 'savedAt', direction: 'descending' })
 
   useEffect(() => {
     let active = true

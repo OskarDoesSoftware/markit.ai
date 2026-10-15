@@ -33,7 +33,7 @@ export function AuthScreen() {
   if (isLoading || profile) {
     return (
       <main className="auth-stage auth-loading-stage">
-        <Spinner label="Loading account" />
+        <Spinner role="status" aria-label="Loading account" />
       </main>
     )
   }

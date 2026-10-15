@@ -13,7 +13,7 @@ Guidance for AI agents working in this repository. This file is the single sourc
 - HeroUI v3 for accessible UI primitives
 - Tailwind CSS v4
 - TypeScript in strict mode
-- Oxfmt and type-aware Oxlint
+- Native `bun fmt` and type-aware `bun lint`
 - Cloudflare Workers via `@cloudflare/vite-plugin` and Wrangler
 - AI SDK v7 for typed realtime tool definitions
 - Exa for live ecommerce product retrieval
@@ -24,22 +24,23 @@ The app is a single package. Routes live in `src/routes`, the router is in `src/
 
 Run commands from the repository root.
 
-| Task                          | Command                                           |
-| ----------------------------- | ------------------------------------------------- |
-| Install                       | `bun install`                                     |
-| Develop                       | `bun run dev`                                     |
-| Build                         | `bun run build`                                   |
-| Type-aware lint and type gate | `bun run lint:type-aware`                         |
-| Format                        | `bun run fmt`                                     |
-| Full verification             | `bun run verify`                                  |
-| Deploy manually               | `bun run deploy`                                  |
-| Reproduce CI locally          | `bun install --frozen-lockfile && bun run verify` |
+| Task                 | Command                                           |
+| -------------------- | ------------------------------------------------- |
+| Install              | `bun install`                                     |
+| Develop              | `bun run dev`                                     |
+| Build                | `bun run build`                                   |
+| Type check           | `bun check` (or `bun run typecheck`)              |
+| Type-aware lint      | `bun run lint:type-aware`                         |
+| Format               | `bun run fmt:write`                               |
+| Full verification    | `bun run verify`                                  |
+| Deploy manually      | `bun run deploy`                                  |
+| Reproduce CI locally | `bun install --frozen-lockfile && bun run verify` |
 
 ## Required gate
 
-`bun run verify` must pass before a commit or deployment. It runs formatting, type-aware Oxlint, and the production build.
+`bun run verify` must pass before a commit or deployment. It runs formatting, native type checking, type-aware linting, and the production build.
 
-Use `bun oxlint --type-aware` as the source of truth for linting and type analysis. Do not substitute `tsc` or `tsc --noEmit`.
+Use native `bun check` (`bun run typecheck`) for type checking, never `tsc` or `tsc --noEmit`. Lint with native `bun lint` and format with native `bun fmt` (named `bun format` in Bun canaries before 2026-10-13); they read `.oxlintrc.json` and `.oxfmtrc.json` and need a Bun canary that ships them, which CI installs. Keep the package script names `check`, `lint`, `fmt` and `format` free so they cannot shadow the native commands.
 
 ## Conventions
 
@@ -101,4 +102,4 @@ The Worker is named `markit-ai` and configured in `wrangler.toml`. `bun run buil
 
 GitHub Actions requires `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets. Runtime secrets such as `OPENAI_API_KEY` and `EXA_API_KEY` remain Worker secrets and are preserved across deployments. Never write credential values into tracked files or workflow YAML.
 
-After every completed change, run `bun run verify`, commit only the files changed for the task, and push the commit. Do not wait for the user to request deployment. The push deploys automatically; verify the workflow and live URL when deployment behavior changes or a failure is reported.
+After every completed change, run `bun run verify`, commit only the files changed for the task, and push the commit to `main` through the `dalist1` GitHub account, which has write access (`fqatipixperi` is read-only on `OskarDoesSoftware/markit.ai`). Do not wait for the user to request deployment. The push deploys automatically; verify the workflow and live URL when deployment behavior changes or a failure is reported.

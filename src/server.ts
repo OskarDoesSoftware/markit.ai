@@ -36,7 +36,11 @@ type Env = AuthEnv & {
 export { PriceAlertScheduler }
 
 type WorkerWebSocket = WebSocket & { accept(): void }
-type WebSocketPairConstructor = new () => { 0: WorkerWebSocket; 1: WorkerWebSocket }
+
+declare global {
+  // Cloudflare Workers runtime global; workers-types is imported as a module, not ambiently.
+  var WebSocketPair: new () => { 0: WorkerWebSocket; 1: WorkerWebSocket }
+}
 
 const startFetch = handler.fetch as unknown as (
   request: Request,
@@ -110,8 +114,7 @@ async function realtimeSocket(
   }
   upstream.accept()
 
-  const Pair = globalThis.WebSocketPair as unknown as WebSocketPairConstructor
-  const pair = new Pair()
+  const pair = new WebSocketPair()
   const client = pair[0]
   const server = pair[1]
   server.accept()
